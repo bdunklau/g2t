@@ -9,6 +9,7 @@ import * as firebaseui from 'firebaseui'
 import { LoginComponent } from './login/login.component';
 import {FirebaseUIModule/*, firebase, firebaseui*/} from 'firebaseui-angular';
 import { AngularFireAuthModule } from '@angular/fire/auth';
+import { HomeComponent } from './home/home.component';
 
 
 
@@ -25,7 +26,8 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
+    LoginComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
