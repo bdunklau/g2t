@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     console.log("login.component.ts: ngOnInit()")
-    firebase.initializeApp(environment.firebase)
+    // firebase.initializeApp(environment.firebase)
 
 
     // if(isPlatformBrowser(this.platformId)) {
@@ -43,8 +43,8 @@ export class LoginComponent implements OnInit {
           var user = firebase.auth().currentUser;
           if(user){
             // this.log.i('login');
-            // this.userService.setFirebaseUser(user);
-            this.userService.signIn(this.log, user);
+            this.userService.setFirebaseUser(user);
+            this.userService.signIn(/*this.log,*/ user);
             this.router.navigate(['/home'])
           }
         }
