@@ -27,6 +27,7 @@
     "firebase": "^7.17.2",
     "firebaseui": "^3.6.1",
     "firebaseui-angular": "^3.4.2",
+    "lodash": "^4.17.20",
     "rxjs": "~6.5.5",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.3"
