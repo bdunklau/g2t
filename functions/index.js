@@ -18,3 +18,9 @@ exports.fooSms = rapid.fooSms
 
 const sms = require('./sms');
 exports.receive = sms.receive;
+exports.welcomeText = sms.welcomeText;
+
+
+const auth = require('./auth');
+exports.createAccount = auth.createAccount;
+exports.deleteAccount = auth.deleteAccount;
