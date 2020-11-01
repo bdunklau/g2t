@@ -34,19 +34,14 @@ export class UserService {
       let user:FirebaseUserModel = this.firebaseUserToFirebaseUserModel(firebase_auth_currentUser);
       this.user = new FirebaseUserModel();
       var userDoc = await this.afs.collection('user').doc(user.uid).ref.get();
-
       if(userDoc && userDoc.data()) {
-          console.log('setFirebaseUser(): userDoc.data() = ', userDoc.data());
-          this.user.populate(userDoc.data());           
+        console.log('setFirebaseUser(): userDoc.data() = ', userDoc.data());
+        this.user.populate(userDoc.data());
       }
       else {
-          // user doesn't exist yet
-          this.user.uid = user.uid
-          this.user.phoneNumber = user.phoneNumber
-          let updateRes = this.afs.collection('user').doc(this.user.uid).ref.set({uid: this.user.uid, phoneNumber: this.user.phoneNumber})
-          console.log('updateUser: DATABASE UPDATE: ', {uid: this.user.uid, phoneNumber: this.user.phoneNumber});
+        this.user.uid = user.uid
+        this.user.phoneNumber = user.phoneNumber
       }
-
   
       // await this.afStorage.storage
       // .refFromURL('gs://'+environment.firebase.storageBucket+'/'+this.user.photoFileName)
