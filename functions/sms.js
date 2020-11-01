@@ -40,3 +40,45 @@ exports.receive = functions.https.onRequest((req, res) => {
 
 
 })
+
+
+
+/**
+ * See also   auth.js:createAccount()
+ */
+exports.welcomeText = functions.firestore.document('user/{uid}').onCreate(async (snap, context) => {
+    let msg = `Thanks for joining Gift2Text.com!  What's your name?`
+
+    let userData = snap.data()
+
+    const doc = await db.collection('config').doc('twilio').get()
+    // const doc = await twilioRef.get();
+    if (!doc.exists) {
+        console.log('No such document!');
+        // THIS IS AN ERROR
+        return true;
+    } else {
+        console.log('Document data:', doc.data());
+        
+        var details = {};
+        details.to = userData.phoneNumber 
+        details.from = doc.data().twilio_phone
+        details.body = msg
+        // if(snap.data().mediaUrl) details.mediaUrl = [snap.data().mediaUrl];
+
+        // require the Twilio module and create a REST client
+        const client = twilio(doc.data().twilio_account_sid, doc.data().twilio_auth_key);
+        return client.messages
+            .create(details)
+            .then((message) => {
+                return true
+                // DO WHAT HERE?
+                // return res.status(200).send(JSON.stringify({message: req.body.message, twilio_message_sid: message.sid}))
+            });
+
+    }
+
+    
+
+
+})
