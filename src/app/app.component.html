@@ -1,17 +1,60 @@
+<!--The content below is only a placeholder and can be replaced.-->
 
+<nav class="navbar navbar-expand-md navbar-light bg-faded" style="background-color:#1167b1">  <!-- 03254c -->
 
+    <!-- https://www.w3schools.com/howto/howto_js_sidenav.asp -->
+    <div id="mySidenav" class="sidenav">
+        <div class="nav-heading" (click)="closeNav()" [routerLink]="['/myaccount']">
+            
+            <div class="row" [hidden]="!isLoggedIn" style="padding-top:20px;padding-bottom:20px">
+                <!-- <div class="col-2">
+                    <div class="circular--portrait">
+                        <img src="{{photoURL}}" width="29">
+                    </div>
+                </div> -->
+     
+                <div class="col-10">
+                    <span *ngIf="name_or_phone">{{name_or_phone}}</span>
+                </div> 
+           </div>
+           <div class="row" [hidden]="isLoggedIn">
+               <div class="col" style="margin-left:-20px"><a id="login_link" class="nav-link" (click)="closeNav()" routerLink="/login" style="color:#ffffff"><i class="fas fa-sign-in-alt"></i> Login</a>
+               </div> 
+          </div>
+     
+        </div>
 
-
-<router-outlet></router-outlet>
-
-
-
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content above * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced. * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * End of Placeholder * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-
-
+        <a href="javascript:void(0)" class="closebtn" id="closeNav" (click)="closeNav()"><i class="fas fa-times" style="color:#ffffff"></i></a>
+        <a [hidden]="!isLoggedIn" id="invitations_link" class="nav-link" (click)="closeNav()" [routerLink]="['/my-list']"> My List</a>
+        <h5 class="nav-link">Friends</h5>
+        
+        <span *ngFor="let friend of friends">
+            <a [hidden]="!isLoggedIn" id="invitations_link" class="nav-link" (click)="closeNav()" [routerLink]="['/my-list']">{{friend.displayName}}</a>
+        </span>
+        
+        
+        <a [hidden]="!isLoggedIn" id="logout_link"class="nav-link" (click)="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+   
+    </div>
+   
+    <!-- Use any element to open the sidenav -->
+    <span (click)="openNav($event)">
+      <i id="hamburger_menu_icon" class="fa fa-bars" style="color:#ffffff"></i>
+    </span>
+   
+    <a class="navbar-brand" style="padding-left:10px;color:#ffffff" href="#">Gift2Text.com </a>
+   
+   </nav>
+   
+   
+   <router-outlet></router-outlet>
+   <!--
+   <div id="footer">
+       <div class="row no-gutters">
+           <div class="col-4"><button class="col-12 btn btn-light" [routerLink]="['/']"><i class="fas fa-home"></i></button></div>
+           <div class="col-4"><button class="col-12 btn btn-light" [routerLink]="['/invitations']"><i class="fa fa-video"></i></button></div>
+           <div class="col-4"><button class="col-12 btn btn-light" routerLink="['/myaccount']"><i class="fas fa-user"></i></button></div>
+       </div>
+   </div>
+   -->
+   

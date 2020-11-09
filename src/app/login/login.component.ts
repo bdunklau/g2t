@@ -4,7 +4,8 @@ import { BehaviorSubject, of } from 'rxjs';
 import { UserService } from '../user/user.service'
 import { Router } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
-import * as firebase from 'firebase/app';
+// import * as firebase from 'firebase/app'
+import firebase from 'firebase/app'
 import * as firebaseui from 'firebaseui'
 import { environment } from '../../environments/environment';
 

@@ -1,16 +1,28 @@
 import { Injectable } from '@angular/core';
 import { FirebaseUserModel } from './user.model';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { MessageService } from '../core/message.service';
+// import * as firebase from 'firebase/app'
+import firebase from 'firebase/app'
+// import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular/common/http';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from '@angular/fire/storage';
+
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-    private user: FirebaseUserModel;
+    user: FirebaseUserModel;
 
     constructor(
-      private afs: AngularFirestore,) { }
+      private afs: AngularFirestore,
+      // private http: HttpClient,
+      public afAuth: AngularFireAuth,
+      private messageService: MessageService,
+      private afStorage: AngularFireStorage,) { }
 
 
     async signIn(/*log: LogService,*/ firebase_auth_currentUser) {
@@ -42,19 +54,6 @@ export class UserService {
         this.user.uid = user.uid
         this.user.phoneNumber = user.phoneNumber
       }
-  
-      // await this.afStorage.storage
-      // .refFromURL('gs://'+environment.firebase.storageBucket+'/'+this.user.photoFileName)
-      // .getDownloadURL().then(url => {
-      //     console.log("this.photoURL = ", url)
-      //     this.user.photoURL = url
-      //     this.messageService.updateUser(this.user) // see app.component.ts:ngOnInit()
-      //  })
-  
-      // this.user.online = online;
-      // this.updateUser(this.user); // saves the online state
-      // console.log('setFirebaseUser(): this.user = ', this.user);
-      // this.messageService.updateUser(this.user); // how app.component.ts knows we have a user now
     }
 
     
@@ -89,6 +88,69 @@ export class UserService {
       let updateRes = this.afs.collection('user').doc(value.uid).ref.update(data);
       console.log('updateUser: DATABASE UPDATE: ', data);
       return updateRes;
+    }
+
+
+    async getCurrentUser() : Promise<FirebaseUserModel> {
+      if(this.user) {
+        console.log('getCurrentUser():  get cached user: ', this.user);
+        return this.user
+      }
+      var user = await this.createFirebaseUserModel()
+      .catch(function(error) {
+        console.log('getCurrentUser():  error: ', error);
+      })
+  
+      if(!user) {
+        console.log('getCurrentUser() user = undefined so return early');
+        return null;
+      }
+  
+      return new Promise<FirebaseUserModel>(async (resolve, reject) => {
+          var userDoc = await this.afs.collection('user').doc(user.uid).ref.get();
+          this.user = user;
+          this.user.populate(userDoc.data());
+          
+          // if(this.user.photoFileName) {
+          //     console.log('this.user.photoFileName:  '+this.user.photoFileName)
+          //     let photoURL = await this.afStorage.storage.refFromURL('gs://'+environment.firebase.storageBucket+'/'+this.user.photoFileName).getDownloadURL()
+          //     this.user.photoURL = photoURL
+          // }
+  
+          console.log('getCurrentUser(): DATABASE HIT this.user = ', this.user);
+          this.messageService.updateUser(this.user); // how app.component.ts knows we have a user now
+          resolve(this.user);
+      });
+    }
+
+
+    // create FirebaseUserModel from firebase.user
+    private createFirebaseUserModel() : Promise<any> {
+      return new Promise((resolve, reject) => {
+        this.getFirebaseUser()
+        .then(res => {
+          // console.log("user.service.ts:resolve() res = ", res);
+          let user:FirebaseUserModel = this.firebaseUserToFirebaseUserModel(res)
+          return resolve(user);
+
+        }, err => {
+          console.log('createFirebaseUserModel(): error: ', err);
+          return reject(err);
+        })
+      })
+    }
+
+
+    private getFirebaseUser() {
+      return new Promise<any>((resolve, reject) => {
+        var user = firebase.auth().onAuthStateChanged(function(user){
+          if (user) {
+            resolve(user);
+          } else {
+            reject('No user logged in');
+          }
+        })
+      })
     }
 
 
