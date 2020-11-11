@@ -22,8 +22,7 @@ import { UserService } from './user/user.service';
 })
 export class AppComponent {
   title = 'Gift2Text.com';
-  friends:{displayName: string}[]
-  isLoggedIn = true
+  isLoggedIn = false
   isAdmin = true
   name_or_phone = "(Name here)"
   private userSubscription: Subscription;
@@ -34,13 +33,6 @@ export class AppComponent {
     private router: Router,
     private userService: UserService,
     private messageService: MessageService) {
-
-    this.friends = [
-      {displayName: 'Tamie'},
-      {displayName: 'Truman'},
-      {displayName: 'Jett'},
-      {displayName: 'Kiera'},
-    ]
   }
 
 
@@ -50,27 +42,29 @@ export class AppComponent {
     if(this.me) {
         this.setAdmin(this.me.isAdmin())
         this.isLoggedIn = true;
-        if(this.me.phoneNumber) this.name_or_phone = this.me.phoneNumber; // TODO not tested
-        if(this.me.displayName) this.name_or_phone = this.me.displayName; // TODO not tested
-        // if(this.me.photoURL) this.photoURL = this.me.photoURL             // TODO not tested
+        if(this.me.phoneNumber) this.name_or_phone = this.me.phoneNumber; 
+        if(this.me.displayName) this.name_or_phone = this.me.displayName; 
+        // if(this.me.photoURL) this.photoURL = this.me.photoURL            
     }
     else {
         this.isLoggedIn = false
-        this.name_or_phone = ""; // TODO not tested
-        this.setAdmin(false); // TODO not tested   
+        this.name_or_phone = ""; 
+        this.setAdmin(false);  
     }
 
-    var nxt = function(value /* FirebaseUserModel */) {
-      console.log('AppComponent: next(): value = ', value);
+    var nxt = function(data /* {user: FirebaseUserModel, event: string} */) {
+      console.log('AppComponent: next(): value = ', data);
       console.log('AppComponent: next(): this = ', this);
-      if(value) this.setAdmin(value.isAdmin())
-      if(value) this.isLoggedIn = true;
-      if(value && value.phoneNumber) this.name_or_phone = value.phoneNumber; // TODO not tested
-      if(value && value.displayName) this.name_or_phone = value.displayName; // TODO not tested
-      if(value && value.photoURL) this.photoURL = value.photoURL             // TODO not tested
-      if(!value) this.isLoggedIn = false;
-      if(!value) this.name_or_phone = ""; // TODO not tested
-      if(!value) this.setAdmin(false); // TODO not tested
+      if(data.user) this.setAdmin(data.user.isAdmin())
+      if(data.user) this.isLoggedIn = true;
+      if(data.user && data.user.phoneNumber) this.name_or_phone = data.user.phoneNumber; 
+      if(data.user && data.user.displayName) this.name_or_phone = data.user.displayName; 
+      if(data.user && data.user.photoURL) this.photoURL = data.user.photoURL         
+      if(!data.user) this.isLoggedIn = false;
+      if(!data.user) this.name_or_phone = ""; 
+      if(!data.user) this.setAdmin(false);
+      if(data.event === 'friend added') this.openNav()
+
     }.bind(this);
 
     this.userSubscription = this.messageService.listenForUser().subscribe({
@@ -84,7 +78,7 @@ export class AppComponent {
 
   // https://www.w3schools.com/howto/howto_js_sidenav.asp
   /* Set the width of the side navigation to 250px */
-  openNav(event) {
+  openNav() {
     document.getElementById("mySidenav").style.width = "250px";
     // document.getElementById("thebody").addEventListener('click', this.closeNav, true);
     // document.body.addEventListener('click', this.fn, true);
@@ -113,6 +107,15 @@ export class AppComponent {
         console.log("Logout error", error);
       }
     );
+  }
+
+  addSomeone() {
+      this.closeNav();
+      this.router.navigate(['/add-friend'])
+  }
+
+  removeFriend(friend) {
+      this.userService.removeFriend(this.me, friend)
   }
   
 }

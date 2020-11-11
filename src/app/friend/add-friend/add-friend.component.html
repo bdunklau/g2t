@@ -1,0 +1,44 @@
+<div class="container">
+    <h5>Add Friend</h5>
+
+    
+<form (ngSubmit)="onSubmit()" #friendForm="ngForm" novalidate>
+
+    <div class="row" style="margin-top:10px">
+        <div class="col" style="margin-top:5px">
+            Name
+        </div>
+    </div>
+    <div class="row" style="margin-top:10px">
+        <div class="col">
+            <input type="text" class="col-12 form-control" id="friend_name_field" [(ngModel)]="friend.displayName"  name="friend_name" #friend_name="ngModel" required>  
+        </div>
+    </div>
+
+
+    <div class="row" style="margin-top:10px">
+        <div class="col" style="margin-top:5px">
+            Phone
+        </div>
+    </div>
+    <div class="row" style="margin-top:10px">
+        <div class="col">
+            <input type="text" class="col-12 form-control" id="friend_phone_field" [(ngModel)]="friend.phoneNumber"  
+                name="friend_phone" #friend_phone="ngModel"  (input)="validatePhoneNo($event.target)" placeholder="(   ) ___-____" required>  
+        </div>
+    </div>
+
+
+    <div class="row" style="margin-top:10px">
+        <div class="col" style="margin-top:5px">
+            <button id="submit_token" type="submit" class="btn btn-success" [hidden]="!friendForm.form.valid">Submit</button>
+        </div>
+    </div>
+
+            
+
+</form>
+
+
+
+</div>

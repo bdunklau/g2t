@@ -7,6 +7,7 @@ import firebase from 'firebase/app'
 // import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular/common/http';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from '@angular/fire/storage';
+import * as _ from 'lodash'
 
 
 
@@ -118,7 +119,7 @@ export class UserService {
           // }
   
           console.log('getCurrentUser(): DATABASE HIT this.user = ', this.user);
-          this.messageService.updateUser(this.user); // how app.component.ts knows we have a user now
+          this.messageService.updateUser({user: this.user, event: 'get user'}); // how app.component.ts knows we have a user now
           resolve(this.user);
       });
     }
@@ -151,6 +152,44 @@ export class UserService {
           }
         })
       })
+    }
+
+
+    async addFriend(aUser: FirebaseUserModel, friend: {displayName: string, phoneNumber: string}) {
+
+        let friendId = this.afs.createId();
+        let batch = this.afs.firestore.batch();
+
+        var userRef = this.afs.collection('user').doc(aUser.uid).ref;
+        aUser.friends.push({displayName: friend.displayName, phoneNumber: friend.phoneNumber, friendId: friendId})
+        batch.update(userRef, {friends: aUser.friends})
+
+        var friendRef = this.afs.collection('friend').doc(friendId).ref;
+        let friendObj = {creator_uid: aUser.uid, creator_name: aUser.displayName, 
+          time_ms: new Date().getTime(), friend_phone: '+1'+friend.phoneNumber, friend_name: friend.displayName.trim(),
+          friend_name_lower_case: friend.displayName.trim().toLowerCase()}
+
+        batch.set(friendRef, friendObj);
+        
+        await batch.commit();
+
+        if(aUser.uid === this.user.uid) this.user = aUser
+    }
+
+
+    async removeFriend(aUser: FirebaseUserModel, friend: {displayName: string, phoneNumber: string, friendId: string}) {
+        
+        _.remove(aUser.friends, fr => { return friend.friendId === fr.friendId })
+        let batch = this.afs.firestore.batch()
+        var userRef = this.afs.collection('user').doc(aUser.uid).ref
+        batch.update(userRef, {friends: aUser.friends})
+        
+        var friendRef = this.afs.collection('friend').doc(friend.friendId).ref;
+        batch.delete(friendRef)
+
+        await batch.commit()
+
+        if(aUser.uid === this.user.uid) this.user = aUser
     }
 
 

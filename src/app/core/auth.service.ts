@@ -47,7 +47,7 @@ export class AuthService {
     return new Promise(async (resolve, reject) => {    
       await this.userService.signOut();
       this.userService.user = null
-      this.messageService.updateUser(this.userService.user);
+      this.messageService.updateUser({user: this.userService.user, event: 'logout'});
 
       var user = firebase.auth().currentUser
       if(user) { 

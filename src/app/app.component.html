@@ -25,11 +25,24 @@
         </div>
 
         <a href="javascript:void(0)" class="closebtn" id="closeNav" (click)="closeNav()"><i class="fas fa-times" style="color:#ffffff"></i></a>
-        <a [hidden]="!isLoggedIn" id="invitations_link" class="nav-link" (click)="closeNav()" [routerLink]="['/my-list']"> My List</a>
-        <h5 class="nav-link">Friends</h5>
+        <div class="row">
+            <div class="col" style="padding-top:5px;padding-bottom:5px;padding-left:25px;padding-right:5px;font-size:20px">Lists</div>   
+            <div class="col"  style="padding-top:5px;padding-bottom:5px;padding-left:5px;padding-right:25px"><button type="button" id="add_someone" (click)="addSomeone()" class="btn btn-primary"> <i class="fas fa-user-plus"></i> Add Someone</button></div>    
+        </div>
+
         
-        <span *ngFor="let friend of friends">
-            <a [hidden]="!isLoggedIn" id="invitations_link" class="nav-link" (click)="closeNav()" [routerLink]="['/my-list']">{{friend.displayName}}</a>
+
+        <span *ngIf="isLoggedIn">
+            <a id="invitations_link" class="nav-link" (click)="closeNav()" [routerLink]="['/view-list/', me.displayName, me.phoneNumber]"> My List</a>
+        
+            <div class="row" *ngFor="let friend of me.friends">
+                <div class="col">
+                <a [hidden]="!isLoggedIn" id="invitations_link" class="nav-link" (click)="closeNav()" [routerLink]="['/view-list', friend.displayName, friend.phoneNumber]">{{friend.displayName}}</a>
+                </div>
+                <div class="col">
+                <button class="btn btn-default" (click)="removeFriend(friend)"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>
         </span>
         
         
@@ -38,7 +51,7 @@
     </div>
    
     <!-- Use any element to open the sidenav -->
-    <span (click)="openNav($event)">
+    <span (click)="openNav()">
       <i id="hamburger_menu_icon" class="fa fa-bars" style="color:#ffffff"></i>
     </span>
    

@@ -12,6 +12,9 @@ import {FirebaseUIModule/*, firebase, firebaseui*/} from 'firebaseui-angular';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { HomeComponent } from './home/home.component';
 import { AuthService } from './core/auth.service';
+import { ViewListComponent } from './list/view-list/view-list.component';
+import { AddFriendComponent } from './friend/add-friend/add-friend.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -29,14 +32,17 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
   declarations: [
     AppComponent,
     LoginComponent,
-    HomeComponent
+    HomeComponent,
+    ViewListComponent,
+    AddFriendComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features
-    FirebaseUIModule.forRoot(firebaseUiAuthConfig)
+    FirebaseUIModule.forRoot(firebaseUiAuthConfig),
+    FormsModule, ReactiveFormsModule,
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]

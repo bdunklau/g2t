@@ -8,6 +8,7 @@ export class FirebaseUserModel {
 //   provider: string;
   phoneNumber: string;
   roles: Array<String>;
+  friends: {displayName: string, phoneNumber: string; uid?: string, friendId: string}[] = []
   // not really using this.  see my-account.component.ts
 //   photoURL: string;
 //   photoFileName: string;
@@ -31,6 +32,7 @@ export class FirebaseUserModel {
     // this.provider = "";
     this.phoneNumber = "";
     this.roles = [];
+    this.friends = [];
     // not really using this.  see my-account.component.ts
     // this.photoURL = "";  
     // this.photoFileName = "thumb_profile-pic-default.png";
@@ -51,6 +53,7 @@ export class FirebaseUserModel {
     // this.provider = obj.provider;
     this.phoneNumber = obj.phoneNumber;
     this.roles = obj.roles;
+    this.friends = obj.friends ? obj.friends : []
     // not really using this.  see my-account.component.ts
     // this.photoURL = obj.photoURL ? obj.photoURL : '';
     // this.photoFileName = obj.photoFileName ? obj.photoFileName : 'thumb_profile-pic-default.png';

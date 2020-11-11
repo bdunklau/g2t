@@ -8,13 +8,13 @@ import { FirebaseUserModel } from '../user/user.model';
 })
 export class MessageService {
 
-  private userListener = new Subject<FirebaseUserModel>();
+  private userListener = new Subject<{user: FirebaseUserModel, event: string}>();
   
 
   constructor() { }
   
 
-  getUser(): Observable<FirebaseUserModel> {
+  getUser(): Observable<{user: FirebaseUserModel, event: string}> {
      return this.userListener.asObservable();
   }
 
@@ -23,8 +23,8 @@ export class MessageService {
     return this.userListener;
   }
 
-  updateUser(user: FirebaseUserModel) {
-    this.userListener.next(user);
+  updateUser(arg: {user: FirebaseUserModel, event: string}) {
+    this.userListener.next(arg);
   }
 
  
