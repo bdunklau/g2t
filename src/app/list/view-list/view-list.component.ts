@@ -82,4 +82,9 @@ export class ViewListComponent implements OnInit {
         }
     }
 
+
+    addItem() {
+        this.router.navigate(['/add-item'])
+    }
+
 }

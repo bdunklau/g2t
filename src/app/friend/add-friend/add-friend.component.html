@@ -11,7 +11,7 @@
     </div>
     <div class="row" style="margin-top:10px">
         <div class="col">
-            <input type="text" class="col-12 form-control" id="friend_name_field" [(ngModel)]="friend.displayName"  name="friend_name" #friend_name="ngModel" required>  
+            <input type="text" class="col-12 form-control" id="displayName_field" [(ngModel)]="friend.displayName"  name="displayName" #displayName="ngModel" required>  
         </div>
     </div>
 
@@ -23,8 +23,8 @@
     </div>
     <div class="row" style="margin-top:10px">
         <div class="col">
-            <input type="text" class="col-12 form-control" id="friend_phone_field" [(ngModel)]="friend.phoneNumber"  
-                name="friend_phone" #friend_phone="ngModel"  (input)="validatePhoneNo($event.target)" placeholder="(   ) ___-____" required>  
+            <input type="text" class="col-12 form-control" id="phoneNumber_field" [(ngModel)]="friend.phoneNumber"  
+                name="phoneNumber" #phoneNumber="ngModel"  (input)="validatePhoneNo($event.target)" placeholder="(   ) ___-____" required>  
         </div>
     </div>
 

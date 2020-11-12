@@ -15,6 +15,8 @@ import { AuthService } from './core/auth.service';
 import { ViewListComponent } from './list/view-list/view-list.component';
 import { AddFriendComponent } from './friend/add-friend/add-friend.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AddItemComponent } from './list/add-item/add-item.component';
+import { NoListNoAccountComponent } from './list/no-list-no-account/no-list-no-account.component';
 
 
 
@@ -34,7 +36,9 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     LoginComponent,
     HomeComponent,
     ViewListComponent,
-    AddFriendComponent
+    AddFriendComponent,
+    AddItemComponent,
+    NoListNoAccountComponent
   ],
   imports: [
     BrowserModule,

@@ -63,6 +63,7 @@ export class AppComponent {
       if(!data.user) this.isLoggedIn = false;
       if(!data.user) this.name_or_phone = ""; 
       if(!data.user) this.setAdmin(false);
+      if(data.event === 'login') this.me = data.user
       if(data.event === 'friend added') this.openNav()
 
     }.bind(this);

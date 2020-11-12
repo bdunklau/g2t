@@ -19,29 +19,29 @@ export class AuthService {
     private messageService: MessageService,
  ){}
 
-  doPhoneLogin() {
-    return new Promise<any>((resolve, reject) => {
-      let provider = new firebase.auth.PhoneAuthProvider();
-      // this.afAuth.auth
-      this.afAuth   //.auth  // .auth will go away when you upgrade @angular/fire
-      .signInWithPopup(provider)
-      .then(res => {
-        resolve(res);
-      }, err => {
-        console.log(err);
-        reject(err);
-      })
-    })
-  }
+  // doPhoneLogin() {
+  //   return new Promise<any>((resolve, reject) => {
+  //     let provider = new firebase.auth.PhoneAuthProvider();
+  //     // this.afAuth.auth
+  //     this.afAuth   //.auth  // .auth will go away when you upgrade @angular/fire
+  //     .signInWithPopup(provider)
+  //     .then(res => {
+  //       resolve(res);
+  //     }, err => {
+  //       console.log(err);
+  //       reject(err);
+  //     })
+  //   })
+  // }
 
-  doLogin(value){
-    return new Promise<any>((resolve, reject) => {
-      firebase.auth().signInWithEmailAndPassword(value.email, value.password)
-      .then(res => {
-        resolve(res);
-      }, err => reject(err))
-    })
-  }
+  // doLogin(value){
+  //   return new Promise<any>((resolve, reject) => {
+  //     firebase.auth().signInWithEmailAndPassword(value.email, value.password)
+  //     .then(res => {
+  //       resolve(res);
+  //     }, err => reject(err))
+  //   })
+  // }
 
   doLogout() {
     return new Promise(async (resolve, reject) => {    

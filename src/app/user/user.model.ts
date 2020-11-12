@@ -4,11 +4,11 @@ export class FirebaseUserModel {
   uid: string; // the doc id
 //   image: string;
   displayName: string;
-  displayName_lower: string;
+  displayName_lowerCase: string;
 //   provider: string;
   phoneNumber: string;
   roles: Array<String>;
-  friends: {displayName: string, phoneNumber: string; uid?: string, friendId: string}[] = []
+  friends: {displayName: string, displayName_lowerCase: string, friendId?: string, phoneNumber: string; uid?: string}[] = []
   // not really using this.  see my-account.component.ts
 //   photoURL: string;
 //   photoFileName: string;
@@ -27,7 +27,7 @@ export class FirebaseUserModel {
     this.uid = "";
     // this.image = "";
     this.displayName = "";
-    this.displayName_lower = "";
+    this.displayName_lowerCase = "";
     this.date_ms = 0;
     // this.provider = "";
     this.phoneNumber = "";
@@ -48,7 +48,7 @@ export class FirebaseUserModel {
     this.uid = obj.uid;
     // this.image = obj.image;
     this.displayName = obj.displayName;
-    this.displayName_lower = obj.displayName_lower;
+    this.displayName_lowerCase = obj.displayName_lowerCase;
     this.date_ms = obj.date_ms;
     // this.provider = obj.provider;
     this.phoneNumber = obj.phoneNumber;

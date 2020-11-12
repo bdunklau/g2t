@@ -28,7 +28,7 @@ export class AddFriendComponent implements OnInit {
 
     async onSubmit(/*form: NgForm*/) { 
         console.log('onSubmit()')
-        this.friend.phoneNumber = this.justNumbers(this.friend.phoneNumber)
+        this.friend.phoneNumber = '+1' + this.justNumbers(this.friend.phoneNumber)
         await this.userService.addFriend(this.me, this.friend)
         this.messageService.updateUser({user: this.me, event: 'friend added'})
         // send to /home

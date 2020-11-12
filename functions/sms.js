@@ -241,8 +241,8 @@ var confirmFriend = async function(args) {
     //  1 - yes,  2 - no (needs correcting)
     if(args.input === '1') {
         /* need to?  await*/ db.collection('friend').add({creator_uid: args.user.uid, creator_name: args.user.displayName, 
-            time_ms: new Date().getTime(), friend_phone: '+1'+args.user.new_friend_phone, friend_name: args.user.new_friend_name.trim(),
-            friend_name_lower_case: args.user.new_friend_name.trim().toLowerCase()})
+            time_ms: new Date().getTime(), phoneNumber: '+1'+args.user.new_friend_phone, displayName: args.user.new_friend_name.trim(),
+            displayName_lowerCase: args.user.new_friend_name.trim().toLowerCase()})
         
         /* need to?  await*/ db.collection('user').doc(args.user.uid)
             .update({new_friend_name: admin.firestore.FieldValue.delete(), new_friend_phone: admin.firestore.FieldValue.delete()})
@@ -281,8 +281,8 @@ var getGiftIdea = async function(args) {
     let name = args.input.trim().toLowerCase()
     const end = name.replace(/.$/, c => String.fromCharCode(c.charCodeAt(0) + 1)); // https://stackoverflow.com/a/57290806
     const querySnapshot = await db.collection('friend')
-                                    .where('friend_name_lower_case', '>=', name) // so we can enter just first name if we want to
-                                    .where('friend_name_lower_case', '<', end)
+                                    .where('displayName_lowerCase', '>=', name) // so we can enter just first name if we want to
+                                    .where('displayName_lowerCase', '<', end)
                                     .limit(1).get()
     let friend
     querySnapshot.forEach(doc => {
@@ -290,8 +290,8 @@ var getGiftIdea = async function(args) {
     })
     // now look up gift
     let giftSnapshot = await db.collection('gift')
-                        .where('phoneNumber', '==', friend.friend_phone)
-                        .where('displayName', '==', friend.friend_name)
+                        .where('phoneNumber', '==', friend.phoneNumber)
+                        .where('displayName', '==', friend.displayName)
                         .where('reserved', '==', false).limit(1).get()
 
 
@@ -305,7 +305,7 @@ var getGiftIdea = async function(args) {
     }
     else {
         let isThisRight = ENTER_NAME_GET_GIFT_IDEA
-        return sendSms({user: args.user, message: friend.friend_name+"'s list is empty", sms_type: isThisRight}) 
+        return sendSms({user: args.user, message: friend.displayName+"'s list is empty", sms_type: isThisRight}) 
     }
 }
 
