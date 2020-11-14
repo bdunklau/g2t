@@ -1,4 +1,4 @@
-import { Component, Injectable } from '@angular/core';
+import { Component, Injectable, OnInit, OnDestroy } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Location } from '@angular/common';
 import { AuthService } from './core/auth.service';
@@ -76,6 +76,12 @@ export class AppComponent {
           }
       })
   }
+
+
+  ngOnDestroy() {
+      if(this.userSubscription) this.userSubscription.unsubscribe()
+  }
+
 
   // https://www.w3schools.com/howto/howto_js_sidenav.asp
   /* Set the width of the side navigation to 250px */

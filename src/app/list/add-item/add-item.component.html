@@ -12,18 +12,19 @@
     <div class="row" style="margin-top:10px">
         <div class="col">
             <input type="text" class="col-12 form-control" id="item_field" [(ngModel)]="gift.item"  name="item" #item="ngModel" required>  
+            <input type="hidden" id="uid_field" [(ngModel)]="gift.uid"  name="uid" #uid="ngModel" required>  
         </div>
     </div>
 
 
     <div class="row" style="margin-top:10px">
         <div class="col" style="margin-top:5px">
-            Link
+            Link  (optional - think Amazon :)
         </div>
     </div>
     <div class="row" style="margin-top:10px">
         <div class="col">
-            <input type="text" class="col-12 form-control" id="link_field" [(ngModel)]="gift.link" name="link" #link="ngModel"  required>  
+            <input type="text" class="col-12 form-control" id="link_field" [(ngModel)]="gift.link" name="link" #link="ngModel">  
         </div>
     </div>
 

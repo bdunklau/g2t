@@ -26,20 +26,23 @@ export class AddItemComponent implements OnInit {
 
 
     async ngOnInit() {
+        this.me = await this.userService.getCurrentUser()
+        this.gift = new Gift()
         this.me = await this.userService.getCurrentUser();
-        if(this.route.snapshot.params.uid && this.route.snapshot.params.uid !== 'undefined') {
-            
-        }
+        this.gift.uid = this.route.snapshot.params.uid
     }
 
 
     async onSubmit(/*form: NgForm*/) { 
-      // console.log('onSubmit()')
-      // this.friend.phoneNumber = this.justNumbers(this.friend.phoneNumber)
-      // await this.userService.addFriend(this.me, this.friend)
-      // this.messageService.updateUser({user: this.me, event: 'friend added'})
-      // // send to /home
-      // this.router.navigate(['/home'])
+      this.gift.added_by_uid = this.me.uid
+      this.gift.deleted = false
+      this.gift.displayName = this.route.snapshot.params.displayName
+      this.gift.phoneNumber = this.route.snapshot.params.phoneNumber
+      this.gift.reserved = false
+      this.gift.time_ms = new Date().getTime()
+      console.log('this.gift = ', this.gift)
+      this.giftService.addGift(this.gift)
+      this.router.navigate(['/view-list', this.route.snapshot.params.uid, this.route.snapshot.params.displayName, this.route.snapshot.params.phoneNumber])
     }
 
 }

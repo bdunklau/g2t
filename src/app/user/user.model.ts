@@ -9,6 +9,7 @@ export class FirebaseUserModel {
   phoneNumber: string;
   roles: Array<String>;
   friends: {displayName: string, displayName_lowerCase: string, friendId?: string, phoneNumber: string; uid?: string}[] = []
+  shopping_cart_size = 0
   // not really using this.  see my-account.component.ts
 //   photoURL: string;
 //   photoFileName: string;
@@ -54,10 +55,11 @@ export class FirebaseUserModel {
     this.phoneNumber = obj.phoneNumber;
     this.roles = obj.roles;
     this.friends = obj.friends ? obj.friends : []
+    this.shopping_cart_size = obj.shopping_cart_size ? obj.shopping_cart_size : 0
     // not really using this.  see my-account.component.ts
     // this.photoURL = obj.photoURL ? obj.photoURL : '';
     // this.photoFileName = obj.photoFileName ? obj.photoFileName : 'thumb_profile-pic-default.png';
-    // this.online = obj.online;
+    // this.online = obj.online; 
     // this.tosAccepted = obj.tosAccepted;
     // this.privacyPolicyRead = obj.privacyPolicyRead;
     // if(obj.isDisabled === true || obj.isDisabled === false) this.isDisabled = obj.isDisabled;

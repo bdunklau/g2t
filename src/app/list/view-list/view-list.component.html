@@ -10,11 +10,32 @@
 
 <span *ngIf="gifts">
 <div class="row" *ngFor="let gift of gifts">
-    <div class="col">{{gift.item}}</div>
+    <div class="col-11" style="margin-top:10px;margin-left:10px;margin-right:10px;padding-top:10px;padding-bottom:10px;padding-left:10px;padding-right:10px;border-radius:5px;border:1px solid #777777">
+        <div class="row">
+            <div class="col-8" style="padding-top:5px">
+                <span *ngIf="gift.link != null"><a href="{{gift.link}}" target="gift">{{gift.item}}</a></span>
+                    
+                <span *ngIf="!gift.link">{{gift.item}}</span>
+            </div>
+
+
+            <span *ngIf="canReserve(gift)">
+            <div class="col-1">
+                <button class="btn btn-default" (click)="reserveGift(gift)"><i class="fas fa-shopping-cart"></i></button>
+            </div>
+            </span>
+
+            <span *ngIf="canDelete(gift)">
+            <div class="col-1">
+                <button class="btn btn-default" (click)="removeGift(gift)"><i class="fas fa-trash"></i></button>
+            </div>
+            </span>
+    
+
+        </div>
+    </div>
 </div>
 </span>
-
-
 
 
 

@@ -33,20 +33,23 @@
         
 
         <span *ngIf="isLoggedIn">
-            <a id="invitations_link" class="nav-link" (click)="closeNav()" [routerLink]="['/view-list/', me.displayName, me.phoneNumber]"> My List</a>
+            <a id="invitations_link" class="nav-link" (click)="closeNav()" [routerLink]="['/view-list/', me.uid, me.displayName, me.phoneNumber]"> My List</a>
         
             <div class="row" *ngFor="let friend of me.friends">
-                <div class="col">
-                <a [hidden]="!isLoggedIn" id="invitations_link" class="nav-link" (click)="closeNav()" [routerLink]="['/view-list', friend.uid]">{{friend.displayName}}</a>
+                <div class="col-9">
+                <a [hidden]="!isLoggedIn" id="invitations_link" class="nav-link" (click)="closeNav()" [routerLink]="['/view-list', friend.uid, friend.displayName, friend.phoneNumber]">{{friend.displayName}}</a>
                 </div>
-                <div class="col">
+                <div class="col-3">
                 <button class="btn btn-default" (click)="removeFriend(friend)"><i class="fas fa-trash"></i></button>
                 </div>
             </div>
         </span>
         
-        
-        <a [hidden]="!isLoggedIn" id="logout_link"class="nav-link" (click)="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        <div class="row">
+            <div class="col-12" style="padding-top:5px;padding-bottom:5px;padding-left:0px;padding-right:5px;font-size:20px">
+                <a [hidden]="!isLoggedIn" class="pull-left" id="logout_link" (click)="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>   
+        </div>
    
     </div>
    
@@ -56,6 +59,7 @@
     </span>
    
     <a class="navbar-brand" style="padding-left:10px;color:#ffffff" href="#">Gift2Text.com </a>
+    <app-shopping-cart-icon></app-shopping-cart-icon>
    
    </nav>
    
