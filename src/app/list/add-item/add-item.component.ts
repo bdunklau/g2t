@@ -5,6 +5,7 @@ import { Gift } from '../../gift/gift.model'
 import { UserService } from '../../user/user.service'
 import { FirebaseUserModel } from 'src/app/user/user.model';
 import { ActivatedRoute, Router/*, NavigationEnd*/ } from '@angular/router';
+import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular/common/http';  // ref:   https://angular.io/guide/http
 
 
 @Component({
@@ -17,6 +18,7 @@ export class AddItemComponent implements OnInit {
     itemForm: FormGroup;
     gift: Gift
     me: FirebaseUserModel
+    amazonLink: string
 
 
     constructor(private giftService: GiftService,
@@ -44,5 +46,14 @@ export class AddItemComponent implements OnInit {
       this.giftService.addGift(this.gift)
       this.router.navigate(['/view-list', this.route.snapshot.params.uid, this.route.snapshot.params.displayName, this.route.snapshot.params.phoneNumber])
     }
+
+    onKeyupEvent(event) {
+        console.log('onKeyupEvent():  gift.item = ', this.gift.item)
+        if(this.gift.item.length > 0) {
+            // call amazon and see what they return
+            this.amazonLink = 'https://www.amazon.com/s?k='+this.gift.item
+        }
+    }
+
 
 }

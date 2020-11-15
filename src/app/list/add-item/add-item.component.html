@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" style="margin-top:20px">
     <h5>Add Item</h5>
 
     
@@ -11,15 +11,22 @@
     </div>
     <div class="row" style="margin-top:10px">
         <div class="col">
-            <input type="text" class="col-12 form-control" id="item_field" [(ngModel)]="gift.item"  name="item" #item="ngModel" required>  
+            <input type="text" class="col-12 form-control" id="item_field" [(ngModel)]="gift.item"  name="item" #item="ngModel" required (keyup)=onKeyupEvent($event)>  
             <input type="hidden" id="uid_field" [(ngModel)]="gift.uid"  name="uid" #uid="ngModel" required>  
         </div>
     </div>
 
+    <span *ngIf="gift != null && gift.item != null && gift.item.trim() !== ''">
+    <div class="row" style="margin-top:10px">
+        <div class="col">
+            <a class="btn" style="background-color:black;color:#ffffff" href="{{amazonLink}}" target="findit">
+                <img src="assets/amazon.png" height="25"> Search for that item here</a>
+        </div>
+    </div>
 
     <div class="row" style="margin-top:10px">
         <div class="col" style="margin-top:5px">
-            Link  (optional - think Amazon :)
+            Paste the link here when you find it  (optional)
         </div>
     </div>
     <div class="row" style="margin-top:10px">
@@ -34,11 +41,11 @@
             <button id="submit_token" type="submit" class="btn btn-success" [hidden]="!itemForm.form.valid">Submit</button>
         </div>
     </div>
+    </span>
 
             
 
 </form>
-
 
 
 </div>
