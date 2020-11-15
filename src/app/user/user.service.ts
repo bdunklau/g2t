@@ -192,6 +192,7 @@ export class UserService {
             theFriend['displayName_lowerCase'] = foundUser.displayName.toLowerCase()
 
             var friendRef = this.afs.collection('user').doc(foundUser.uid).ref
+            if(!foundUser.friends) foundUser.friends = []
             foundUser.friends.push({ displayName: aUser.displayName, 
                                      displayName_lowerCase: aUser.displayName_lowerCase,
                                      friendId: friendId,
@@ -224,6 +225,7 @@ export class UserService {
         await batch.commit();
 
         if(aUser.uid === this.user.uid) this.user = aUser
+        this.messageService.updateUser({user: this.user, event: 'friend added'})
     }
 
 
