@@ -97,9 +97,12 @@ exports.receive = functions.https.onRequest(async (req, res) => {
 
 /**
  * See also   auth.js:createAccount()
+ * Lesson Learned:  Don't prompt for name here.  Instead, do nothing OR send the user link to /home page
+ * because that page has the MinimalAccountInfoGuard attached to it which will send the user to /minimal-account-info page
+ * That page prompts the user for name
  */
 exports.welcomeText = functions.firestore.document('user/{uid}').onCreate(async (snap, context) => {
-    let msg = `Thanks for joining Gift2Text.com!  What's your name?`
+    let msg = `Thanks for joining Gift2Text.com !`
 
     let userData = snap.data()
 
@@ -126,14 +129,12 @@ exports.welcomeText = functions.firestore.document('user/{uid}').onCreate(async 
                 return db.collection('user').doc(userData.uid)
                     .update({last_sms_type:WELCOME, 
                              last_sms_time_ms: new Date().getTime(),
-                             required_info: 'name' })
+                             /*required_info: 'name'*/ })
             });
 
     }
 
     
-
-
 })
 
 

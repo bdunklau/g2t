@@ -40,12 +40,12 @@ export class LoginComponent implements OnInit {
          */
         let ui: firebaseui.auth.AuthUI
         
-        let onLoginSuccessful = function() {
+        let onLoginSuccessful = async function() {
           var user = firebase.auth().currentUser;
           if(user){
             // this.log.i('login');
             this.userService.setFirebaseUser(user);
-            this.userService.signIn(/*this.log,*/ user);
+            await this.userService.signIn(/*this.log,*/ user);
             this.router.navigate(['/home'])
           }
         }

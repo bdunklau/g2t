@@ -174,7 +174,7 @@ export class UserService {
 
 
     async addFriend(aUser: FirebaseUserModel, friend: {displayName: string, phoneNumber: string}) {
-
+        console.log('addFriend():  --- CHECK ------------------------')
         /**
          * already a user?...
          */
@@ -198,6 +198,7 @@ export class UserService {
                                      phoneNumber: aUser.phoneNumber,
                                      uid: aUser.uid })
 
+            console.log('addFriend():  foundUser.friends = ', foundUser.friends)
             batch.update(friendRef, {friends: foundUser.friends})
         }
         else {
@@ -205,6 +206,7 @@ export class UserService {
             theFriend['displayName_lowerCase'] = theFriend['displayName'].toLowerCase()
         }
         aUser.friends.push(theFriend)
+        console.log('addFriend():  aUser.friends = ', aUser.friends)
         batch.update(userRef, {friends: aUser.friends})
 
 
@@ -216,6 +218,7 @@ export class UserService {
                          displayName: theFriend['displayName'],
                          displayName_lowerCase: theFriend['displayName'].toLowerCase() }
 
+        console.log('addFriend():  friendObj = ', friendObj)
         batch.set(friendRef, friendObj);
 
         await batch.commit();

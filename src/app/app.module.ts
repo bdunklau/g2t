@@ -19,6 +19,7 @@ import { AddItemComponent } from './list/add-item/add-item.component';
 import { NoListNoAccountComponent } from './list/no-list-no-account/no-list-no-account.component';
 import { ShoppingCartIconComponent } from './shopping-cart/shopping-cart-icon/shopping-cart-icon.component';
 import { ShoppingCartListComponent } from './shopping-cart/shopping-cart-list/shopping-cart-list.component';
+import { MinimalAccountInfoComponent } from './my-account/minimal-account-info/minimal-account-info.component';
 
 
 
@@ -42,7 +43,8 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     AddItemComponent,
     NoListNoAccountComponent,
     ShoppingCartIconComponent,
-    ShoppingCartListComponent
+    ShoppingCartListComponent,
+    MinimalAccountInfoComponent
   ],
   imports: [
     BrowserModule,
