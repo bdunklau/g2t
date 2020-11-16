@@ -48,17 +48,10 @@ export class GiftService {
             if(noParms) {
                 gift.link = gift.link + '?tag=gift2text-20'
             }
-            else if(gift.link.indexOf('tag=gift2text-20') !== -1) {
-                // do nothing
-            }
-            else if(gift.link.indexOf('tag=')) {
+            else {
                 // some other aff link - replace it
                 let baseUrl = gift.link.substring(0, gift.link.indexOf('?'))
-                let parms = gift.link.substring(gift.link.indexOf('?')+1)
-                let parmArr = _.split(parms, '&')
-                _.remove(parmArr, p => { return p.startsWith('tag=') })
-                parmArr.push('tag=gift2text-20')
-                gift.link = baseUrl + "?" + _.join(parmArr, '&')
+                gift.link = baseUrl + '?tag=gift2text-20'
             }
         }
         return gift
