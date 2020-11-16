@@ -25,6 +25,19 @@
             </div>     
 
         </div>
+
+
+        <span *ngIf="gift.link == null || gift.link.trim() === ''">
+        <div class="row">
+            <div class="col">
+                <a class="btn" style="background-color:black;color:#ffffff" href="https://www.amazon.com/s?k={{gift.item}}&tag=gift2text-20" target="findit">
+                    <img src="assets/amazon.png" height="25"> Search for this item here :)</a>
+            </div> 
+        </div>           
+        </span>    
+
+
+
     </div>
 </div>
 </span>

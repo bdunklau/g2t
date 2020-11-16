@@ -15,6 +15,7 @@ export class ShoppingCartListComponent implements OnInit {
   
     gifts: Gift[]
 
+
     constructor(private giftService: GiftService,
                 private router: Router,
                 private userService: UserService) { }

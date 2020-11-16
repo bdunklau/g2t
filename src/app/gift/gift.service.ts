@@ -38,7 +38,36 @@ export class GiftService {
     }
 
 
-    addGift(gift: Gift) {
+    private affiliateLink(gift: Gift) {
+        if(gift.link && gift.link.trim() !== '' && gift.link.indexOf('amazon.com') !== -1) {
+            gift.link = gift.link.trim()
+            if(!gift.link.startsWith('https://') && !gift.link.startsWith('http://')) {
+                gift.link = 'https://'+gift.link
+            }
+            let noParms = gift.link.indexOf('?') === -1
+            if(noParms) {
+                gift.link = gift.link + '?tag=gift2text-20'
+            }
+            else if(gift.link.indexOf('tag=gift2text-20') !== -1) {
+                // do nothing
+            }
+            else if(gift.link.indexOf('tag=')) {
+                // some other aff link - replace it
+                let baseUrl = gift.link.substring(0, gift.link.indexOf('?'))
+                let parms = gift.link.substring(gift.link.indexOf('?')+1)
+                let parmArr = _.split(parms, '&')
+                _.remove(parmArr, p => { return p.startsWith('tag=') })
+                parmArr.push('tag=gift2text-20')
+                gift.link = baseUrl + "?" + _.join(parmArr, '&')
+            }
+        }
+        return gift
+    }
+
+
+
+    addGift(gift: Gift) { 
+        gift = this.affiliateLink(gift)
         this.afs.collection('gift').add(gift.toObj())
     }
 
