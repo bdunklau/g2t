@@ -5,7 +5,6 @@
     <div class="form-group" style="width:100%">
       <div class="input-group" id="dateRangePicker" style="width:100%">
         <input class="form-control datepicker"
-              [(ngModel)]="selected"
               id="dateRange"
               [placeholder]="placeholder"
               name="dp"
@@ -13,9 +12,10 @@
               ngbDatepicker
               #dp="ngbDatepicker"
               (dateSelect)="onDateSelection($event)"
-              [displayMonths]="1"
+              [displayMonths]=""
               [dayTemplate]="t" [autoClose]="false"
               [firstDayOfWeek]="7"
+              [navigation]="navigation"
               (click)="dp.toggle(); isOpen = !isOpen" />
           <!-- 7 = Sunday -->
         <div class="input-group-append">
@@ -25,13 +25,13 @@
     </div>
   </form>
 
-  <!-- DOES THIS SUPPORT DATE RANGE SELECTION?  NOT SURE.  BUT TAKEN OUT, WE CAN SELECTION JUST ONE DATE - WHAT WE WANT -->
-  <ng-template #t let-date="date" let-focused="focused">
+  <!-- DOES THIS SUPPORT DATE RANGE SELECTION?  NOT SURE.  BUT TAKEN OUT, WE CAN SELECT JUST ONE DATE - WHAT WE WANT -->
+  <!-- <ng-template #t let-date="date" let-focused="focused">
     <span class="custom-day" [class.focused]="focused" [class.range]="isFrom(date) || isTo(date) || isInside(date) || isHovered(date)"
       [class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = toDate(date)" (mouseleave)="hoveredDate = null">
       {{ date.day }}
     </span>
-  </ng-template>
+  </ng-template> -->
 
   
   

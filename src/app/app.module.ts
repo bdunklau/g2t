@@ -20,6 +20,8 @@ import { NoListNoAccountComponent } from './list/no-list-no-account/no-list-no-a
 import { ShoppingCartIconComponent } from './shopping-cart/shopping-cart-icon/shopping-cart-icon.component';
 import { ShoppingCartListComponent } from './shopping-cart/shopping-cart-list/shopping-cart-list.component';
 import { MinimalAccountInfoComponent } from './my-account/minimal-account-info/minimal-account-info.component';
+import { DateChooserComponent } from './util/date-chooser/date-chooser.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap'; // https://ng-bootstrap.github.io/#/getting-started
 
 
 
@@ -44,7 +46,8 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     NoListNoAccountComponent,
     ShoppingCartIconComponent,
     ShoppingCartListComponent,
-    MinimalAccountInfoComponent
+    MinimalAccountInfoComponent,
+    DateChooserComponent
   ],
   imports: [
     BrowserModule,
@@ -52,6 +55,7 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features
     FirebaseUIModule.forRoot(firebaseUiAuthConfig),
+    NgbModule.forRoot(),
     FormsModule, ReactiveFormsModule,
   ],
   providers: [AuthService],

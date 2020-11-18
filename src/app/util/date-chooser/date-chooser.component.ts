@@ -14,11 +14,12 @@ export class DateChooserComponent {
     @ViewChild('dp') private datePicker: NgbInputDatepicker;
     @Input() from: Date;
     @Input() to: Date;
-    @Input() placeholder = 'starting today';
+    @Input() placeholder;
     @Output() dateRangeSelection = new EventEmitter<{ from: Date, to: Date }>();
     hoveredDate: Date;
     isOpen = false;
     displayFormat: string = 'MM/DD'
+    navigation = 'arrows'
 
 
     @HostListener('document:click', ['$event.target']) onClick(element) {
@@ -31,6 +32,8 @@ export class DateChooserComponent {
     constructor() { }
 
     ngOnInit() {
+        // let december = 11
+        // this.from = new Date(moment().year(), december, 25)
     }
 
     private emit(close?: boolean) {
@@ -84,7 +87,7 @@ export class DateChooserComponent {
       //   + `${moment(this.to).format(this.displayFormat)}`
       //   : `${fromFormatted}`;
 
-      return fromFormatted
+      return  fromFormatted
     }
 
     onDateSelection(date: NgbDateStruct) {

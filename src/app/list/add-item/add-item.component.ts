@@ -6,6 +6,7 @@ import { UserService } from '../../user/user.service'
 import { FirebaseUserModel } from 'src/app/user/user.model';
 import { ActivatedRoute, Router/*, NavigationEnd*/ } from '@angular/router';
 import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular/common/http';  // ref:   https://angular.io/guide/http
+import * as moment from 'moment';
 
 
 @Component({
@@ -19,6 +20,9 @@ export class AddItemComponent implements OnInit {
     gift: Gift
     me: FirebaseUserModel
     amazonLink: string
+    defaultFrom: string = '12/25'
+    defaultTo: string;
+    dates: any;
 
 
     constructor(private giftService: GiftService,
@@ -30,7 +34,6 @@ export class AddItemComponent implements OnInit {
     async ngOnInit() {
         this.me = await this.userService.getCurrentUser()
         this.gift = new Gift()
-        this.me = await this.userService.getCurrentUser();
         this.gift.uid = this.route.snapshot.params.uid
     }
 
@@ -38,6 +41,11 @@ export class AddItemComponent implements OnInit {
     async onSubmit(/*form: NgForm*/) { 
       this.gift.added_by_uid = this.me.uid
       this.gift.deleted = false
+      if(!this.gift.deliver_ms) {
+          var d = new Date()
+          d.setMonth(11); d.setDate(25); d.setHours(23); d.setMinutes(59); d.setSeconds(0)
+          this.gift.deliver_ms = d.getTime()
+      }
       this.gift.displayName = this.route.snapshot.params.displayName
       this.gift.phoneNumber = this.route.snapshot.params.phoneNumber
       this.gift.reserved = false
@@ -53,6 +61,22 @@ export class AddItemComponent implements OnInit {
             // call amazon and see what they return
             this.amazonLink = 'https://www.amazon.com/s?k='+this.gift.item
         }
+    }
+    
+
+    public onDateRangeSelection(range: { from: Date/*, to: Date*/ }) {
+      // Add 1 day since times are midnight
+      // subtract 1 minute so that the day number will still be correct when MM/dd format
+      var plus1Day = moment(range.from).add(1, 'days').subtract(1, 'minute').toDate()
+      this.gift.deliver_ms = plus1Day.getTime()
+      
+      // if(range && range.to && range.from) {
+      //   var plus1Day = moment(range.to).add(1, 'days').toDate()
+      //   this.dates = {date1: range.from.getTime(), date2: plus1Day.getTime()};
+      //   this.log$.next(this.dates);
+      //   console.log('onDateRangeSelection: this.level = ', this.level, ' this.dates = ', this.dates);
+      //   this.page.init('log_'+this.level, this.queryInitial.bind(this), this.querySubsequent.bind(this), {reverse: this.reverse, prepend: this.prepend /* why false? */});
+      // }
     }
 
 

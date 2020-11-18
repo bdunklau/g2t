@@ -3,6 +3,7 @@ export class Gift {
     // see firestore rules    https://console.firebase.google.com/project/g2t-bd737/firestore/rules  
     added_by_uid: string 
     deleted: boolean = false
+    deliver_ms?: number  // date in ms when gift will be given
     displayName: string
     docId?: string
     item: string
@@ -27,6 +28,7 @@ export class Gift {
             time_ms: this.time_ms,
             uid: this.uid
         }
+        if(this.deliver_ms) obj['deliver_ms'] = this.deliver_ms
         if(this.docId) obj['docId'] = this.docId
         if(this.link) obj['link'] = this.link
         if(this.reserved_by_displayName) obj['reserved_by_displayName'] = this.reserved_by_displayName

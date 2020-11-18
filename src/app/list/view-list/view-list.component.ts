@@ -98,7 +98,7 @@ export class ViewListComponent implements OnInit {
 
     canDelete(gift: Gift) {
         let canDel = gift.added_by_uid === this.me.uid
-        console.log('canDelete(): gift = ', gift, '  canDel = ', canDel)
+        // console.log('canDelete(): gift = ', gift, '  canDel = ', canDel)
         return canDel
     }
 
