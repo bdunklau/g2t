@@ -1,0 +1,38 @@
+
+<!-- https://ng-bootstrap.github.io/#/components/datepicker/overview -->
+
+<form class="form-inline">
+    <div class="form-group" style="width:100%">
+      <div class="input-group" id="dateRangePicker" style="width:100%">
+        <input class="form-control datepicker"
+              [(ngModel)]="selected"
+              id="dateRange"
+              [placeholder]="placeholder"
+              name="dp"
+              [value]="formattedDateRange"
+              ngbDatepicker
+              #dp="ngbDatepicker"
+              (dateSelect)="onDateSelection($event)"
+              [displayMonths]="1"
+              [dayTemplate]="t" [autoClose]="false"
+              [firstDayOfWeek]="7"
+              (click)="dp.toggle(); isOpen = !isOpen" />
+          <!-- 7 = Sunday -->
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary calendar" (click)="dp.toggle(); isOpen = !isOpen" type="button"></button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <!-- DOES THIS SUPPORT DATE RANGE SELECTION?  NOT SURE.  BUT TAKEN OUT, WE CAN SELECTION JUST ONE DATE - WHAT WE WANT -->
+  <ng-template #t let-date="date" let-focused="focused">
+    <span class="custom-day" [class.focused]="focused" [class.range]="isFrom(date) || isTo(date) || isInside(date) || isHovered(date)"
+      [class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = toDate(date)" (mouseleave)="hoveredDate = null">
+      {{ date.day }}
+    </span>
+  </ng-template>
+
+  
+  
+  
