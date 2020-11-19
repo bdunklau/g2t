@@ -23,11 +23,14 @@ export class MinimalAccountInfoComponent implements OnInit {
     }
 
 
-    onSubmit(/* not needed   form: NgForm*/) {
+    async onSubmit(/* not needed   form: NgForm*/) {
       this.user.displayName = this.nameValue;
-      this.userService.updateUser(this.user).then(() => {
-        this.router.navigate(['/home']);
-      })
+      await this.userService.updateUser(this.user)
+      // NOW see if this user was added as a friend prior to account creationg
+      // Query the friend collection:  where phoneNumber = this.user.phoneNumber - there could be more than one friend doc
+      this.userService.checkForFriends(this.user)
+      
+      this.router.navigate(['/home']);
     }
 
 }

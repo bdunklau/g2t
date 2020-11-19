@@ -253,4 +253,53 @@ export class UserService {
     }
 
 
+    async checkForFriends(aUser: FirebaseUserModel) {
+        let observable = this.afs.collection('friend', ref => ref.where("phoneNumber", "==", aUser.phoneNumber)).snapshotChanges().pipe(take(1));
+        let docChangeActions = await observable.toPromise()
+        let friends = []
+        // gather up all the creator_uid's AND creator_name's
+        if(docChangeActions && docChangeActions.length > 0) {
+            _.each(docChangeActions, obj => {
+                let thedata = obj.payload.doc.data()
+                let creator_uid = thedata.creator_uid
+                let creator_name = thedata.creator_name
+                friends.push({creator_uid:creator_uid, creator_name:creator_name, friendId: obj.payload.doc.id})
+            })
+        }
+
+        /**
+         * Loop thru each creator_uid -> get the user doc
+         * find the friend for this aUser -> add aUser.uid to that friend element (user.friends[?].uid)
+         */
+        let aUserFriends = []
+        _.each(friends, async fr => {
+            let usrDoc = await this.afs.collection('user').doc(fr.creator_uid).ref.get()
+            if(usrDoc && usrDoc.data()) {
+                let usr = new FirebaseUserModel()
+                usr.populate(usrDoc.data())
+                let aUserAsFriend = _.find(usr.friends, ufr => { return ufr.displayName === aUser.displayName && ufr.phoneNumber === aUser.phoneNumber })
+                if(aUserAsFriend) aUserAsFriend.uid = aUser.uid
+                await this.afs.collection('user').doc(fr.creator_uid).update({friends: usr.friends})
+                /**
+                 * Now you have to add the user's above to aUser.friends (which is empty in the beginning)
+                 */
+                aUserFriends.push({
+                    displayName: usr.displayName,
+                    displayName_lowerCase: usr.displayName_lowerCase,
+                    friendId: fr.friendId,
+                    phoneNumber: usr.phoneNumber,
+                    uid: usr.uid
+                })
+
+                await this.afs.collection('user').doc(aUser.uid).update({friends: aUserFriends})
+                aUser.friends = aUserFriends
+                this.messageService.updateUser({user: aUser, event: 'friend added'})
+            }
+        })
+
+        // console.log('returning friends: ', friends)
+        // return friends
+    }
+
+
 }
