@@ -10,49 +10,50 @@
 
 <span *ngIf="gifts">
 <div class="row" *ngFor="let gift of gifts">
-    <div class="col-11" style="margin-top:10px;margin-left:10px;margin-right:10px;padding-top:10px;padding-bottom:10px;padding-left:10px;padding-right:10px;border-radius:5px;border:1px solid #777777">
-        <div class="row">
+    <div class="col-11" style="margin-top:10px;margin-left:10px;margin-right:10px;padding-top:10px;padding-bottom:10px;padding-left:10px;padding-right:10px;border-radius:5px;border:1px solid #ababab">
+        
+        <div class="row">            
+            <div class="col" style="padding-top:5px;font-size:28px"> 
+                    <!-- gift item here -->
+                    <span *ngIf="gift.link != null">
+                        <!-- <a href="{{gift.link}}" target="gift">{{gift.item}}</a> -->
+                        
+                        <a class="btn col-6" style="background-color:black;color:#ffffff" href="{{gift.link}}" target="findit">
+                            <img src="assets/amazon.png" height="25"> {{gift.item}}</a>
+                    </span>
+                        
+                    <span *ngIf="!gift.link">{{gift.item}}</span>
+            </div>
+
+
             <div class="col" style="padding-top:5px">
-                <span *ngIf="gift.link != null">
-                    <!-- <a href="{{gift.link}}" target="gift">{{gift.item}}</a> -->
-                    
-                    <a class="btn col-6" style="background-color:black;color:#ffffff" href="{{gift.link}}" target="findit">
-                        <img src="assets/amazon.png" height="25"> {{gift.item}}</a>
-                </span>
-                    
-                <span *ngIf="!gift.link">{{gift.item}}</span>
+                <div class="row">  
+                    <div class="col" style="padding-top:5px">
+                                <!-- reserve button -->
+                                <span *ngIf="canReserve(gift)">
+                                    <button class="btn btn-success" (click)="reserveGift(gift)" title="reserve item"><i class="fas fa-shopping-cart"></i> Reserve</button>
+                                </span>
+                    </div>
+                    <div class="col" style="padding-top:5px;">
+                                <!-- delete button -->
+                                <span *ngIf="canDelete(gift)" style="float:right">
+                                    <button class="btn btn-danger" (click)="removeGift(gift)"><i class="fas fa-trash"></i></button>
+                                </span>   
+                    </div>
+                </div>
+                <div class="row">  
+                    <div class="col" style="padding-top:5px">
+                                <!-- search button -->
+                                <span *ngIf="gift.link == null || gift.link.trim() === ''">
+                                    <a class="btn col" style="background-color:black;color:#ffffff" href="https://www.amazon.com/s?k={{gift.item}}&tag=gift2text-20" target="findit">
+                                        <img src="assets/amazon.png" height="25"> Search for this item here</a>             
+                                </span>    
+                    </div>
+                </div>
             </div>
-
-
-            <span *ngIf="canReserve(gift)">
-            <div class="col">
-                <button class="btn btn-default" (click)="reserveGift(gift)" title="reserve item"><i class="fas fa-shopping-cart"></i></button>
-            </div>
-            </span>
-
-            <span *ngIf="canDelete(gift)">
-            <div class="col">
-                <button class="btn btn-default" (click)="removeGift(gift)"><i class="fas fa-trash"></i></button>
-            </div>
-            </span>    
-
         </div>
-
-
-        <div class="row">
-
-            <span *ngIf="gift.link == null || gift.link.trim() === ''">
-            <div class="col">
-                <a class="btn col" style="background-color:black;color:#ffffff" href="https://www.amazon.com/s?k={{gift.item}}&tag=gift2text-20" target="findit">
-                    <img src="assets/amazon.png" height="25"> Search for this item here</a>
-            </div>             
-            </span>    
-
-        </div>
-
-
-
-
+        
+        
 
     </div>
 </div>
