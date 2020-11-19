@@ -12,8 +12,7 @@
               ngbDatepicker
               #dp="ngbDatepicker"
               (dateSelect)="onDateSelection($event)"
-              [displayMonths]=""
-              [dayTemplate]="t" [autoClose]="false"
+              [autoClose]="false"
               [firstDayOfWeek]="7"
               [navigation]="navigation"
               (click)="dp.toggle(); isOpen = !isOpen" />
@@ -23,7 +22,7 @@
         </div>
       </div>
     </div>
-  </form>
+</form>
 
   <!-- DOES THIS SUPPORT DATE RANGE SELECTION?  NOT SURE.  BUT TAKEN OUT, WE CAN SELECT JUST ONE DATE - WHAT WE WANT -->
   <!-- <ng-template #t let-date="date" let-focused="focused">
