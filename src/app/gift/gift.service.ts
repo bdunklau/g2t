@@ -119,5 +119,13 @@ export class GiftService {
         _.remove(this.shoppingCart, item => { return item.docId === gift.docId })
         this.messageService.updateUser({user: me, event: 'update shopping cart size'})
     }
+
+
+    /**
+     * temp function
+     */
+    async fix(gift: Gift) {
+        await this.afs.collection('gift').doc(gift.docId).update({added_by_uid: gift.uid})
+    }
     
 }

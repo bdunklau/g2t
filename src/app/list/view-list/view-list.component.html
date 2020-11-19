@@ -13,16 +13,13 @@
     <div class="col-11" style="margin-top:10px;margin-left:10px;margin-right:10px;padding-top:10px;padding-bottom:10px;padding-left:10px;padding-right:10px;border-radius:5px;border:1px solid #ababab">
         
         <div class="row">            
-            <div class="col" style="font-size:28px"> 
+            <div class="col" style="font-size:20px"> 
                     <!-- gift item here -->
-                    <span *ngIf="gift.link != null">
-                        <!-- <a href="{{gift.link}}" target="gift">{{gift.item}}</a> -->
-                        
-                        <a class="btn col-6" style="background-color:black;color:#ffffff" href="{{gift.link}}" target="findit">
-                            <img src="assets/amazon.png" height="25"> {{gift.item}}</a>
+                    {{gift.item}}
+                    <span style="font-size:12px">
+                    <P>docId: {{gift.docId}}</P>
+                    <P><a (click)="fix(gift)"><u>fix</u></a></P>
                     </span>
-                        
-                    <span *ngIf="!gift.link">{{gift.item}}</span>
             </div>
 
 
@@ -31,9 +28,40 @@
                     <div class="col" style="padding-top:5px">
                                 <!-- reserve button -->
                                 <span *ngIf="canReserve(gift)">
-                                    <button class="btn btn-success" (click)="reserveGift(gift)" title="reserve item"><i class="fas fa-shopping-cart"></i> Reserve</button>
+                                    <button class="col-12 btn btn-success" (click)="reserveGift(gift)" title="reserve item"><i class="fas fa-shopping-cart"></i> Reserve</button>
+                                </span>
+                                <span *ngIf="gift.reserved_by_displayName && gift.uid !== me.uid">
+                                    Reserved by: {{gift.reserved_by_displayName}}
                                 </span>
                     </div>
+                </div>
+
+                <div class="row">  
+                    <div class="col" style="padding-top:5px">
+                                <!-- search button -->
+                                <span *ngIf="gift.link == null || gift.link.trim() === ''">
+                                    <a class="col-12 btn" style="background-color:black;color:#ffffff" href="https://www.amazon.com/s?k={{gift.item}}&tag=gift2text-20" target="findit">
+                                        <img src="assets/amazon.png" height="25"> Find it</a>             
+                                </span> 
+                    </div>
+                </div>
+
+                <div class="row">  
+
+                    <div class="col" style="padding-top:5px">
+                                <!-- or buy button -->
+                                <span *ngIf="canBuy(gift)">         <!-- gift.link != null && !gift.reserved -->
+                                    <!-- <a href="{{gift.link}}" target="gift">{{gift.item}}</a> -->
+                                    
+                                    <a class="col-12 btn btn-success" href="{{gift.link}}" target="findit">
+                                        <i class="fas fa-dollar-sign"></i> View/Buy</a>
+                                </span>
+                    </div>
+
+
+                </div>
+
+                <div class="row">  
                     <div class="col" style="padding-top:5px;">
                                 <!-- delete button -->
                                 <span *ngIf="canDelete(gift)" style="float:right">
@@ -41,15 +69,8 @@
                                 </span>   
                     </div>
                 </div>
-                <div class="row">  
-                    <div class="col" style="padding-top:5px">
-                                <!-- search button -->
-                                <span *ngIf="gift.link == null || gift.link.trim() === ''">
-                                    <a class="btn col" style="background-color:black;color:#ffffff" href="https://www.amazon.com/s?k={{gift.item}}&tag=gift2text-20" target="findit">
-                                        <img src="assets/amazon.png" height="25"> Search for this item here</a>             
-                                </span>    
-                    </div>
-                </div>
+
+
             </div>
         </div>
         

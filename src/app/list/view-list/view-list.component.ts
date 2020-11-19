@@ -122,5 +122,32 @@ export class ViewListComponent implements OnInit {
     }
 
 
+    /**
+     * Really, "can I see the view/buy button?"
+     */
+    canBuy(gift: Gift) {
+        if(!gift.link || gift.link.trim() === '') return false
+        if(this.isForMe(gift)) return true // need to see the links I put on my own list
+        if(this.isBoughtBySomeoneElse(gift)) return false
+
+        return true
+    }
+
+
+    isForMe(gift: Gift) {
+        return gift.uid === this.me.uid
+    }
+
+
+    isBoughtBySomeoneElse(gift: Gift) {
+        return gift.reserved && gift.reserved_by_uid !== this.me.uid
+    }
+
+
+    fix(gift: Gift) {
+        this.giftService.fix(gift)
+    }
+
+
 
 }
