@@ -12,68 +12,102 @@
 <div class="row" *ngFor="let gift of gifts">
     <div class="col-11" style="margin-top:10px;margin-left:10px;margin-right:10px;padding-top:10px;padding-bottom:10px;padding-left:10px;padding-right:10px;border-radius:5px;border:1px solid #ababab">
         
-        <div class="row">            
-            <div class="col" style="font-size:20px"> 
-                    <!-- gift item here -->
-                    {{gift.item}}
-                    <span style="font-size:12px">
-                    <P>docId: {{gift.docId}}</P>
-                    <P><a (click)="fix(gift)"><u>fix</u></a></P>
-                    </span>
+        <div class="row">
+            <!-- left side -->
+            <div class="col"> 
+
+                <!-- item -->
+                <div class="row">
+                    <div class="col" style="font-size:20px"> 
+                        <!-- gift item here -->
+                        {{gift.item}}
+                                                
+                        <!-- <span style="font-size:12px">
+                        <P>docId: {{gift.docId}}</P> 
+                        <P><a (click)="fix(gift)"><u>fix</u></a></P>
+                        </span> -->
+                    </div>
+                </div>
+
+                <!-- other recipients -->
+                <div class="row" *ngIf="gift.otherRecipients && gift.otherRecipients.length > 1"> <!-- at least 2 people because each person is listed as an otherRecipient on his  gift -->
+                    <div class="col"> 
+                        <hr/>
+                        Other addRecipients
+                        <span *ngFor="let recipient of gift.otherRecipients">
+                            <span *ngIf="recipient.uid != me.uid"> <!-- don't list yourself as an 'otherRecipient' even though you're in the list -->
+                                        <br/>
+                                        <span>
+                                            {{recipient.displayName}}  
+                                            <!-- trash can: adder can delete recipients --> 
+                                            <span *ngIf="gift.added_by_uid == me.uid">
+                                                <button class="btn btn-default" (click)="removeRecipient(gift, recipient)"><i class="fas fa-trash"></i></button>
+                                            </span>
+                                        </span>                            
+                            </span>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- add recipients -->
+                <div class="row">
+                    <div class="col" style="padding-top:20px"> 
+                        <span *ngIf="gift.added_by_uid == me.uid">
+                        <button class="col-4 btn btn-primary" (click)="addRecipients(gift)" title="add recipient"><i class="fas fa-user-plus"></i></button>
+                        </span>
+                    </div>
+                </div>
+
             </div>
 
-
-            <div class="col">
-                <div class="row">  
-                    <div class="col" style="padding-top:5px">
-                                <!-- reserve button -->
-                                <span *ngIf="canReserve(gift)">
-                                    <button class="col-12 btn btn-success" (click)="reserveGift(gift)" title="reserve item"><i class="fas fa-shopping-cart"></i> Reserve</button>
-                                </span>
-                                <span *ngIf="gift.reserved_by_displayName && gift.uid !== me.uid">
-                                    Reserved by: {{gift.reserved_by_displayName}}
-                                </span>
+            <!-- right side -->
+            <div class="col"> 
+                <!-- reserve -->
+                <div class="row">
+                    <div class="col"> 
+                            <span *ngIf="canReserve(gift)">
+                                <button class="col-12 btn btn-success" (click)="reserveGift(gift)" title="reserve item"><i class="fas fa-shopping-cart"></i> Reserve</button>
+                            </span>
+                            <span *ngIf="gift.reserved_by_displayName && gift.uid !== me.uid">
+                                Reserved by: {{gift.reserved_by_displayName}}
+                            </span>
                     </div>
                 </div>
-
-                <div class="row">  
-                    <div class="col" style="padding-top:5px">
-                                <!-- search button -->
-                                <span *ngIf="gift.link == null || gift.link.trim() === ''">
-                                    <a class="col-12 btn" style="background-color:black;color:#ffffff" href="https://www.amazon.com/s?k={{gift.item}}&tag=gift2text-20" target="findit">
-                                        <img src="assets/amazon.png" height="25"> Find it</a>             
-                                </span> 
+                
+                <!-- find -->
+                <div class="row">
+                    <div class="col" style="padding-top:10px"> 
+                            <span *ngIf="gift.link == null || gift.link.trim() === ''">
+                                <a class="col-12 btn" style="background-color:black;color:#ffffff" href="https://www.amazon.com/s?k={{gift.item}}&tag=gift2text-20" target="findit">
+                                    <img src="assets/amazon.png" height="25"> Find it</a>             
+                            </span> 
                     </div>
                 </div>
-
-                <div class="row">  
-
-                    <div class="col" style="padding-top:5px">
-                                <!-- or buy button -->
-                                <span *ngIf="canBuy(gift)">         <!-- gift.link != null && !gift.reserved -->
-                                    <!-- <a href="{{gift.link}}" target="gift">{{gift.item}}</a> -->
-                                    
-                                    <a class="col-12 btn btn-success" href="{{gift.link}}" target="findit">
-                                        <i class="fas fa-dollar-sign"></i> View/Buy</a>
-                                </span>
-                    </div>
-
-
-                </div>
-
-                <div class="row">  
-                    <div class="col" style="padding-top:5px;">
-                                <!-- delete button -->
-                                <span *ngIf="canDelete(gift)" style="float:right">
-                                    <button class="btn btn-danger" (click)="removeGift(gift)"><i class="fas fa-trash"></i></button>
-                                </span>   
+                
+                <!-- buy -->
+                <div class="row">
+                    <div class="col" style="padding-top:10px"> 
+                            <span *ngIf="canBuy(gift)">         <!-- gift.link != null && !gift.reserved -->
+                                <!-- <a href="{{gift.link}}" target="gift">{{gift.item}}</a> -->
+                                
+                                <a class="col-12 btn btn-success" href="{{gift.link}}" target="findit">
+                                    <i class="fas fa-dollar-sign"></i> View/Buy</a>
+                            </span>
                     </div>
                 </div>
-
-
+                
+                <!-- delete -->
+                <div class="row">
+                    <div class="col" style="padding-top:10px"> 
+                            <span *ngIf="canDelete(gift)" style="float:right">
+                                <button class="btn btn-danger" (click)="removeGift(gift)"><i class="fas fa-trash"></i></button>
+                            </span>   
+                    </div>
+                </div>
             </div>
         </div>
-        
+
+       
         
 
     </div>

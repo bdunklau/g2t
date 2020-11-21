@@ -65,11 +65,19 @@ export class GiftService {
     }
 
     async removeGift(gift: Gift) {
+        /**
+         * joint gift?
+         */
+        let isJointGift = gift.otherRecipients && gift.otherRecipients.length > 0
+        let otherGiftIds = _.map(gift.otherRecipients, rec => rec.giftId)
+
         if(gift.reserved) {
             await this.afs.collection('gift').doc(gift.docId).update({deleted: true})
+            _.each(otherGiftIds, async giftId => { await this.afs.collection('gift').doc(giftId).update({deleted: true}) })
         }
         else {
             await this.afs.collection('gift').doc(gift.docId).delete()
+            _.each(otherGiftIds, async giftId => { await this.afs.collection('gift').doc(giftId).delete() })
         }
     }
 
@@ -118,6 +126,82 @@ export class GiftService {
         await batch.commit()
         _.remove(this.shoppingCart, item => { return item.docId === gift.docId })
         this.messageService.updateUser({user: me, event: 'update shopping cart size'})
+    }
+
+
+    createId() {
+        return this.afs.createId()
+    }
+
+
+    // private async saveGifts(gifts: Gift[]) {
+    //     _.each(gifts, async gift => {
+    //         await this.afs.collection('gift').doc(gift.docId).set(gift.toObj());
+    //     })
+    // }
+
+
+    async removeRecipient(args: {gift: Gift, recipient: any}) {
+        _.remove(args.gift.otherRecipients, other => { return other.uid === args.recipient.uid })
+
+        _.each(args.gift.otherRecipients, other => { 
+            this.afs.collection('gift').doc(other.giftId).update({otherRecipients: args.gift.otherRecipients})
+        })
+
+        // finally, remove gift having recipient.giftId
+        this.afs.collection('gift').doc(args.recipient.giftId).delete()
+
+    }
+
+
+    async addRecipient(me: FirebaseUserModel, displayName: string, gift: Gift) {
+        console.log('addRecipient()  CHECK:  gift = ', gift)
+
+        let allRecipients = gift.otherRecipients
+        let presentAlready = _.find(allRecipients, {giftId: gift.docId, displayName: gift.displayName, phoneNumber: gift.phoneNumber, uid: gift.uid})
+        if(!presentAlready)
+            allRecipients.push({giftId: gift.docId, displayName: gift.displayName, phoneNumber: gift.phoneNumber, uid: gift.uid}) // sort of redundant/unecessary
+        
+        /**
+         * I'm only going to let you choose from YOUR friends, not the friends of the person's list your looking at
+         * that would make more sense but I don't want to do the query
+         */
+        let friend = _.find(me.friends, fr => { return fr.displayName_lowerCase.startsWith(displayName.toLowerCase().trim()) })
+        if(!friend) {
+            // no friend - can't do anything
+            return
+        }
+
+        let newGift = new Gift()        
+        newGift.added_by_uid = gift.added_by_uid
+        newGift.deleted = gift.deleted
+        newGift.deliver_ms = gift.deliver_ms
+        newGift.displayName = friend.displayName
+        newGift.docId = this.createId()
+        newGift.item = gift.item
+        newGift.link = gift.link
+        newGift.phoneNumber = friend.phoneNumber
+        newGift.reserved = gift.reserved
+        newGift.reserved_by_displayName = gift.reserved_by_displayName
+        newGift.reserved_by_phoneNumber = gift.reserved_by_phoneNumber
+        newGift.reserved_by_uid = gift.reserved_by_uid
+        newGift.reserved_time_ms = gift.reserved_time_ms
+        newGift.time_ms = gift.time_ms
+        newGift.uid = friend.uid
+        
+        // go ahead and add this new recipient to his own list of 'otherRecipients'
+        allRecipients.push({giftId: newGift.docId, displayName: newGift.displayName, phoneNumber: newGift.phoneNumber, uid: newGift.uid})
+        newGift.otherRecipients = allRecipients
+
+        // all recipients now actually contain themselves - we'll filter out the me's in the view component or ngFor loop
+
+        // now save the new gift
+        await this.afs.collection('gift').doc(newGift.docId).set(newGift.toObj()) // not sure if we need await here
+
+        _.each(allRecipients, recipient => {
+            this.afs.collection('gift').doc(recipient.giftId).update({otherRecipients: allRecipients})
+        })
+
     }
 
 

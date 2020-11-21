@@ -1,0 +1,35 @@
+
+<div class="container">
+
+<form (ngSubmit)="onSubmit()" #addRecipientForm="ngForm" novalidate>
+
+    <div class="row" style="margin-top:10px">
+        <div class="col" style="margin-top:5px">
+            Name
+        </div>
+    </div>
+    <div class="row" style="margin-top:10px">
+        <div class="col">
+            <input type="text" class="col-12 form-control" id="displayName_field" [(ngModel)]="displayName"  name="xxx" #xxx="ngModel" required>  
+           
+        </div>
+    </div>
+
+    <div class="row" style="margin-top:10px">
+        <div class="col">
+            <button id="submit_token" type="submit" class="btn btn-success" [hidden]="!addRecipientForm.form.valid">Submit</button>
+        </div>
+    </div>
+
+
+
+</form>
+
+
+<!-- 
+history.state.gift = {{gift | json}}
+ -->
+
+
+</div>
+

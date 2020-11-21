@@ -10,11 +10,13 @@ import { NoListNoAccountComponent } from './list/no-list-no-account/no-list-no-a
 import { ShoppingCartListComponent } from './shopping-cart/shopping-cart-list/shopping-cart-list.component'
 import { MinimalAccountInfoGuard } from './my-account/minimal-account-info/minimal-account-info.guard';
 import { MinimalAccountInfoComponent } from './my-account/minimal-account-info/minimal-account-info.component';
+import { AddRecipientComponent } from './list/add-recipient/add-recipient.component';
 
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'add-friend', component: AddFriendComponent },
+  { path: 'add-recipient', component: AddRecipientComponent },
   { path: 'add-item/:uid/:displayName/:phoneNumber', component: AddItemComponent },
   { path: 'home', component: HomeComponent, canActivate: [MinimalAccountInfoGuard] },
   { path: 'login', component: LoginComponent },

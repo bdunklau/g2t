@@ -8,6 +8,7 @@ export class Gift {
     docId?: string
     item: string
     link?: string
+    otherRecipients?: {giftId: string, displayName: string, phoneNumber: string, uid: string}[]
     phoneNumber: string
     reserved: boolean = false
     reserved_by_displayName?: string
@@ -32,10 +33,30 @@ export class Gift {
         if(this.docId) obj['docId'] = this.docId
         if(this.link) obj['link'] = this.link
         if(this.reserved_by_displayName) obj['reserved_by_displayName'] = this.reserved_by_displayName
+        if(this.otherRecipients) obj['otherRecipients'] = this.otherRecipients
         if(this.reserved_by_phoneNumber) obj['reserved_by_phoneNumber'] = this.reserved_by_phoneNumber
         if(this.reserved_by_uid) obj['reserved_by_uid'] = this.reserved_by_uid
         if(this.reserved_time_ms) obj['reserved_time_ms'] = this.reserved_time_ms
         return obj
+    }
+
+    clone(gift: Gift) {
+        this.added_by_uid = gift.added_by_uid
+        this.deleted = gift.deleted
+        this.deliver_ms = gift.deliver_ms
+        this.displayName = gift.displayName
+        this.docId = gift.docId
+        this.item = gift.item
+        this.link = gift.link
+        this.otherRecipients = gift.otherRecipients ? gift.otherRecipients : []
+        this.phoneNumber = gift.phoneNumber
+        this.reserved = gift.reserved
+        this.reserved_by_displayName = gift.reserved_by_displayName
+        this.reserved_by_phoneNumber = gift.reserved_by_phoneNumber
+        this.reserved_by_uid = gift.reserved_by_uid
+        this.reserved_time_ms = gift.reserved_time_ms
+        this.time_ms = gift.time_ms
+        this.uid = gift.uid
     }
 }
 

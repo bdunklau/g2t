@@ -21,7 +21,8 @@ import { ShoppingCartIconComponent } from './shopping-cart/shopping-cart-icon/sh
 import { ShoppingCartListComponent } from './shopping-cart/shopping-cart-list/shopping-cart-list.component';
 import { MinimalAccountInfoComponent } from './my-account/minimal-account-info/minimal-account-info.component';
 import { DateChooserComponent } from './util/date-chooser/date-chooser.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap'; // https://ng-bootstrap.github.io/#/getting-started
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { AddRecipientComponent } from './list/add-recipient/add-recipient.component'; // https://ng-bootstrap.github.io/#/getting-started
 
 
 
@@ -47,7 +48,8 @@ const firebaseUiAuthConfig: firebaseui.auth.Config = {
     ShoppingCartIconComponent,
     ShoppingCartListComponent,
     MinimalAccountInfoComponent,
-    DateChooserComponent
+    DateChooserComponent,
+    AddRecipientComponent
   ],
   imports: [
     BrowserModule,

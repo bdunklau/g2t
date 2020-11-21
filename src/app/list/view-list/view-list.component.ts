@@ -63,16 +63,18 @@ export class ViewListComponent implements OnInit {
             });
           })
         )
-          .subscribe(objs => {
+        .subscribe(objs => {
             // need TeamMember objects, not Team's, because we need the leader attribute from TeamMember
             this.gifts = _.map(objs, obj => {
-              let gf = obj as unknown;
-              let gift = gf as Gift;
-              gift.docId = obj.id
-              return gift // <-- don't forget this part ;)  otherwise you'll have an array of undefined's  ;)
+                let gf = obj as unknown;
+                let _gift = gf as Gift;
+                let gift = new Gift()
+                gift.clone(_gift)
+                gift.docId = obj.id
+                return gift // <-- don't forget this part ;)  otherwise you'll have an array of undefined's  ;)
             })
             console.log('this.gifts = ', this.gifts)
-          });
+        });
     }
 
 
@@ -141,6 +143,16 @@ export class ViewListComponent implements OnInit {
 
     isBoughtBySomeoneElse(gift: Gift) {
         return gift.reserved && gift.reserved_by_uid !== this.me.uid
+    }
+
+
+    addRecipients(gift: Gift) {
+        this.router.navigate(['/add-recipient'], {state: {gift: gift, me: this.me}})
+    }
+
+
+    removeRecipient(gift, recipient) {
+        this.giftService.removeRecipient({gift: gift, recipient: recipient})
     }
 
 
