@@ -81,14 +81,28 @@ export class GiftService {
         }
     }
 
+    
     async reserveGift(me: FirebaseUserModel, gift: Gift) {
         let batch = this.afs.firestore.batch();
         var userRef = this.afs.collection('user').doc(me.uid).ref;
         var giftRef = this.afs.collection('gift').doc(gift.docId).ref;
-        batch.update(giftRef, {reserved: true, reserved_by_uid: me.uid, reserved_by_displayName: me.displayName, reserved_by_phoneNumber: me.phoneNumber, reserved_time_ms: new Date().getTime()})
+        let reserveData = {reserved: true, reserved_by_uid: me.uid, reserved_by_displayName: me.displayName, reserved_by_phoneNumber: me.phoneNumber, reserved_time_ms: new Date().getTime()}
+        batch.update(giftRef, reserveData)
         // batch.update(userRef, {shopping_cart_size: firebase.firestore.FieldValue.increment(1) }) // works but not necessary, and you have to query to get the new value
         me.shopping_cart_size = me.shopping_cart_size + 1
         batch.update(userRef, {shopping_cart_size: me.shopping_cart_size})
+
+        /**
+         * have to check for multiple recipients...
+         */
+        if(gift.otherRecipients) {
+            _.each(gift.otherRecipients, other => {
+                // 'me' could also be one of these recipients, so we would be unnecessarily updating me's record a second time here
+                let otherRef = this.afs.collection('gift').doc(other.giftId).ref
+                batch.update(otherRef, reserveData)
+            })
+        }
+
         await batch.commit();
         this.shoppingCart.push(gift)
         this.messageService.updateUser({user: me, event: 'update shopping cart size'})
@@ -116,11 +130,24 @@ export class GiftService {
         let batch = this.afs.firestore.batch()
         let userRef = this.afs.collection('user').doc(me.uid).ref
         let giftRef = this.afs.collection('gift').doc(gift.docId).ref
-        batch.update(giftRef, {reserved: false, 
+        let returnData = {reserved: false, 
             reserved_by_uid: firebase.firestore.FieldValue.delete(), 
             reserved_by_displayName: firebase.firestore.FieldValue.delete(), 
             reserved_by_phoneNumber: firebase.firestore.FieldValue.delete(), 
-            reserved_time_ms: firebase.firestore.FieldValue.delete()})
+            reserved_time_ms: firebase.firestore.FieldValue.delete()}
+        batch.update(giftRef, returnData)
+
+        /**
+         * have to check for multiple recipients...
+         */
+        if(gift.otherRecipients) {
+            _.each(gift.otherRecipients, other => {
+                // 'me' could also be one of these recipients, so we would be unnecessarily updating me's record a second time here
+                let otherRef = this.afs.collection('gift').doc(other.giftId).ref
+                batch.update(otherRef, returnData)
+            })
+        }
+
         me.shopping_cart_size = me.shopping_cart_size - 1
         batch.update(userRef, {shopping_cart_size: me.shopping_cart_size})
         await batch.commit()
