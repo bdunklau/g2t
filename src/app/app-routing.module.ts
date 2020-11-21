@@ -11,16 +11,20 @@ import { ShoppingCartListComponent } from './shopping-cart/shopping-cart-list/sh
 import { MinimalAccountInfoGuard } from './my-account/minimal-account-info/minimal-account-info.guard';
 import { MinimalAccountInfoComponent } from './my-account/minimal-account-info/minimal-account-info.component';
 import { AddRecipientComponent } from './list/add-recipient/add-recipient.component';
+import { MyAccountComponent } from './my-account/my-account.component';
+import { AddChildComponent } from './my-account/add-child/add-child.component';
 
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: 'add-child', component: AddChildComponent },
   { path: 'add-friend', component: AddFriendComponent },
   { path: 'add-recipient', component: AddRecipientComponent },
   { path: 'add-item/:uid/:displayName/:phoneNumber', component: AddItemComponent },
   { path: 'home', component: HomeComponent, canActivate: [MinimalAccountInfoGuard] },
   { path: 'login', component: LoginComponent },
   { path: 'minimal-account-info', component: MinimalAccountInfoComponent },
+  { path: 'my-account', component: MyAccountComponent },
   { path: 'no-list-no-account', component: NoListNoAccountComponent },
   { path: 'shopping-cart', component: ShoppingCartListComponent },
   { path: 'view-list/:uid/:displayName/:phoneNumber', component: ViewListComponent, canActivate: [ViewListGuard] },

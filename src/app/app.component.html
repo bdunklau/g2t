@@ -26,6 +26,13 @@
 
         <a href="javascript:void(0)" class="closebtn" id="closeNav" (click)="closeNav()"><i class="fas fa-times" style="color:#ffffff"></i></a>
         <div class="row">
+            <div class="col" style="padding-top:5px;padding-bottom:5px;padding-left:0px;padding-right:5px;font-size:20px">
+                <a [hidden]="!isLoggedIn" id="my_account_link" (click)="myAccount()"><i class="fas fa-user-circle"></i> My Account</a>
+            </div>   
+            
+        </div>
+
+        <div class="row">
             <div class="col" style="padding-top:5px;padding-bottom:5px;padding-left:25px;padding-right:5px;font-size:20px">Lists</div>   
             <div class="col"  style="padding-top:5px;padding-bottom:5px;padding-left:5px;padding-right:25px"><button type="button" id="add_someone" (click)="addSomeone()" class="btn btn-primary"> <i class="fas fa-user-plus"></i> Add Friend</button></div>    
         </div>

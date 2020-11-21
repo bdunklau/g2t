@@ -1,5 +1,5 @@
 
-<div class="container">
+<div class="container" style="margin-top:20px">
 <h3>{{listName}}</h3>
 
 
@@ -22,13 +22,13 @@
                         <!-- gift item here -->
                         {{gift.item}}
                                                 
-                        <!-- <span style="font-size:12px">
+                        <span style="font-size:12px">
                         <P>docId: {{gift.docId}}</P> 
-                        </span> -->
+                        </span>
                                                 
-                        <!-- <span style="font-size:12px">
+                        <span style="font-size:12px">
                         <P><a (click)="fix(gift)"><u>fix</u></a></P>
-                        </span> -->
+                        </span>
                     </div>
                 </div>
 
@@ -36,7 +36,7 @@
                 <div class="row" *ngIf="gift.otherRecipients && gift.otherRecipients.length > 1"> <!-- at least 2 people because each person is listed as an otherRecipient on his  gift -->
                     <div class="col"> 
                         <hr/>
-                        Other addRecipients
+                        Other Recipients
                         <span *ngFor="let recipient of gift.otherRecipients">
                             <span *ngIf="recipient.uid != me.uid"> <!-- don't list yourself as an 'otherRecipient' even though you're in the list -->
                                         <br/>

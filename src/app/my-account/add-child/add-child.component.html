@@ -1,0 +1,31 @@
+<div class="container">
+    <h3>Add Child</h3>
+    
+
+    <form (ngSubmit)="onSubmit()" #addChildForm="ngForm" novalidate>
+
+        <div class="row" style="margin-top:10px">
+            <div class="col" style="margin-top:5px">
+                Child's Full Name
+            </div>
+        </div>
+        <div class="row" style="margin-top:10px">
+            <div class="col">
+                <input type="text" class="col-12 form-control" id="displayName_field" [(ngModel)]="displayName"  name="xxx" #xxx="ngModel" required>  
+               
+            </div>
+        </div>
+    
+        <div class="row" style="margin-top:10px">
+            <div class="col">
+                <button id="submit_token" type="submit" class="btn btn-success" [hidden]="!addChildForm.form.valid"><i class="fas fa-user-plus"></i> Add Child</button>
+            </div>
+        </div>
+    
+    
+    
+    </form>
+
+
+    
+</div>

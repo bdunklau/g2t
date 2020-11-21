@@ -124,5 +124,11 @@ export class AppComponent {
   removeFriend(friend) {
       this.userService.removeFriend(this.me, friend)
   }
+
+
+  myAccount() {
+      this.closeNav()
+      this.router.navigate(['/my-account'])
+  }
   
 }

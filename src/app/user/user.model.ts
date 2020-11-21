@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 export class FirebaseUserModel {
   uid: string; // the doc id
 //   image: string;
+  children?: any[]
   displayName: string;
   displayName_lowerCase: string;
 //   provider: string;
@@ -27,6 +28,7 @@ export class FirebaseUserModel {
   constructor(){
     this.uid = "";
     // this.image = "";
+    this.children = []
     this.displayName = "";
     this.displayName_lowerCase = "";
     this.date_ms = 0;
@@ -48,6 +50,7 @@ export class FirebaseUserModel {
   populate(obj) {
     this.uid = obj.uid;
     // this.image = obj.image;
+    this.children = obj.children ? obj.children : []
     this.displayName = obj.displayName;
     this.displayName_lowerCase = obj.displayName_lowerCase;
     this.date_ms = obj.date_ms;

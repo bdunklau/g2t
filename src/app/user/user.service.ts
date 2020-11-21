@@ -302,4 +302,29 @@ export class UserService {
     }
 
 
+    async addChild(user, displayName) {
+        let childId = this.afs.createId()
+        let childData = {
+            displayName: displayName.trim(),
+            displayName_lowerCase: displayName.trim().toLowerCase(),
+            friends: [],
+            phoneNumber: user.phoneNumber,
+            time_ms: new Date().getTime(),
+            uid: childId
+        }
+        await this.afs.collection('user').doc(childId).set(childData)
+        if(!user.children) user.children = []
+        user.children.push(childData)
+        if(this.user && this.user.uid === user.uid) this.user = user
+        await this.afs.collection('user').doc(user.uid).update({children: user.children})
+    }
+
+
+    async removeChild(user, child) {
+        _.remove(user.children, loopChild => { return loopChild.uid === child.uid } )
+        await this.afs.collection('user').doc(user.uid).update({children: user.children})
+        await this.afs.collection('user').doc(child.uid).delete()
+        if(this.user && this.user.uid === user.uid) this.user = user
+    }
+
 }

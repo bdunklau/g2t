@@ -1,0 +1,24 @@
+<div class="container" style="margin-top:20px">
+<h3>My Account</h3>
+
+
+<div class="row" style="margin-top:40px">
+    <div class="col" style="font-size:22px">
+        Children
+    </div>
+    <div class="col">
+        <button class="btn btn-primary" (click)="addChild()"><i class="fas fa-user-plus"></i> Add Child</button>
+    </div>
+</div>
+
+<div class="row" *ngFor="let child of me.children">
+    <div class="col">
+        {{child.displayName}} &nbsp;&nbsp;&nbsp;
+        <button class="btn btn-default" (click)="removeChild(me, child)"><i class="fas fa-trash"></i></button>
+    </div>
+</div>
+
+
+
+
+</div>
