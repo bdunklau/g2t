@@ -7,13 +7,13 @@
 <div class="row" *ngFor="let gift of gifts">
     <div class="col-11" style="margin-top:10px;margin-left:10px;margin-right:10px;padding-top:10px;padding-bottom:10px;padding-left:10px;padding-right:10px;border-radius:5px;border:1px solid #777777">
         <div class="row">
-            <div class="col-10" style="padding-top:5px">
+            <div class="col-8" style="padding-top:5px">
                 For: {{gift.displayName}} 
                 <!-- docId: {{gift.docId}} if you're interested -->
             </div>  
-            <div class="col-1" style="padding-top:5px">
+            <div class="col-4" style="padding-top:5px">
                 <!-- return item -->
-                <a (click)="returnItem(gift)" title="return item"><i class="fas fa-undo"></i></a>
+                <a class="btn btn-default" (click)="returnItem(gift)" title="don't give this after all"><i class="fas fa-undo"></i> Return</a>
             </div>     
 
         </div>
@@ -31,7 +31,7 @@
         <div class="row">
             <div class="col">
                 <a class="btn" style="background-color:black;color:#ffffff" href="https://www.amazon.com/s?k={{gift.item}}&tag=gift2text-20" target="findit">
-                    <img src="assets/amazon.png" height="25"> Search for this item here :)</a>
+                    <img src="assets/amazon.png" height="25"> Find it</a>
             </div> 
         </div>           
         </span>    
