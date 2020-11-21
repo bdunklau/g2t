@@ -8,6 +8,7 @@ export class Gift {
     docId?: string
     item: string
     link?: string
+    linkedGiftId?: string 
     otherRecipients?: {giftId: string, displayName: string, phoneNumber: string, uid: string}[]
     phoneNumber: string
     reserved: boolean = false
@@ -32,6 +33,7 @@ export class Gift {
         if(this.deliver_ms) obj['deliver_ms'] = this.deliver_ms
         if(this.docId) obj['docId'] = this.docId
         if(this.link) obj['link'] = this.link
+        if(this.linkedGiftId) obj['linkedGiftId'] = this.linkedGiftId
         if(this.reserved_by_displayName) obj['reserved_by_displayName'] = this.reserved_by_displayName
         if(this.otherRecipients) obj['otherRecipients'] = this.otherRecipients
         if(this.reserved_by_phoneNumber) obj['reserved_by_phoneNumber'] = this.reserved_by_phoneNumber
@@ -48,6 +50,7 @@ export class Gift {
         this.docId = gift.docId
         this.item = gift.item
         this.link = gift.link
+        this.linkedGiftId = gift.linkedGiftId
         this.otherRecipients = gift.otherRecipients ? gift.otherRecipients : []
         this.phoneNumber = gift.phoneNumber
         this.reserved = gift.reserved

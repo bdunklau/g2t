@@ -113,11 +113,22 @@ export class GiftService {
         let observable = this.afs.collection('gift', ref => ref.where("reserved_by_uid", "==", uid)).snapshotChanges().pipe(take(1));
         let docChangeActions = await observable.toPromise()
         let gifts:Gift[] = []
+        /**
+         * If a gift has a linkedGiftId, then it has multiple recipients.  Only show these gifts one time - they are duplicated in the db for each recipient
+         */
+        let linkedGiftIds = []
         if(docChangeActions && docChangeActions.length > 0) {
             _.each(docChangeActions, obj => {
                 let gift = obj.payload.doc.data() as Gift
                 gift.docId = obj.payload.doc.id
-                gifts.push(gift)
+                let shouldBeAdded = true
+                if(gift.linkedGiftId) {
+                    // have we alredy put this in the gifts array?...
+                    let found = _.find(linkedGiftIds, alreadyThere => { return gift.linkedGiftId === alreadyThere })
+                    if(found) shouldBeAdded = false
+                    else /*not found so add it now*/ linkedGiftIds.push(gift.linkedGiftId)
+                }
+                if(shouldBeAdded) gifts.push(gift)
             })
         }
         console.log('shopping cart: ', gifts)
@@ -159,14 +170,7 @@ export class GiftService {
     createId() {
         return this.afs.createId()
     }
-
-
-    // private async saveGifts(gifts: Gift[]) {
-    //     _.each(gifts, async gift => {
-    //         await this.afs.collection('gift').doc(gift.docId).set(gift.toObj());
-    //     })
-    // }
-
+    
 
     async removeRecipient(args: {gift: Gift, recipient: any}) {
         _.remove(args.gift.otherRecipients, other => { return other.uid === args.recipient.uid })
@@ -183,6 +187,10 @@ export class GiftService {
 
     async addRecipient(me: FirebaseUserModel, displayName: string, gift: Gift) {
         console.log('addRecipient()  CHECK:  gift = ', gift)
+
+        if(!gift.linkedGiftId) {
+            gift.linkedGiftId = this.createId()
+        }
 
         let allRecipients = gift.otherRecipients
         let presentAlready = _.find(allRecipients, {giftId: gift.docId, displayName: gift.displayName, phoneNumber: gift.phoneNumber, uid: gift.uid})
@@ -207,6 +215,7 @@ export class GiftService {
         newGift.docId = this.createId()
         newGift.item = gift.item
         newGift.link = gift.link
+        newGift.linkedGiftId = gift.linkedGiftId
         newGift.phoneNumber = friend.phoneNumber
         newGift.reserved = gift.reserved
         newGift.reserved_by_displayName = gift.reserved_by_displayName
@@ -224,6 +233,7 @@ export class GiftService {
 
         // now save the new gift
         await this.afs.collection('gift').doc(newGift.docId).set(newGift.toObj()) // not sure if we need await here
+        await this.afs.collection('gift').doc(gift.docId).update({linkedGiftId: gift.linkedGiftId}) // not sure if we need await here
 
         _.each(allRecipients, recipient => {
             this.afs.collection('gift').doc(recipient.giftId).update({otherRecipients: allRecipients})
