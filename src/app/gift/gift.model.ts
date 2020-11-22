@@ -16,6 +16,7 @@ export class Gift {
     reserved_by_phoneNumber?: string
     reserved_by_uid?: string
     reserved_time_ms?: number
+    surprise = false
     time_ms: number
     uid: string
 
@@ -27,6 +28,7 @@ export class Gift {
             item: this.item,
             phoneNumber: this.phoneNumber,
             reserved: this.reserved,
+            surprise: this.surprise,
             time_ms: this.time_ms,
             uid: this.uid
         }
@@ -58,6 +60,7 @@ export class Gift {
         this.reserved_by_phoneNumber = gift.reserved_by_phoneNumber
         this.reserved_by_uid = gift.reserved_by_uid
         this.reserved_time_ms = gift.reserved_time_ms
+        this.surprise = gift.surprise
         this.time_ms = gift.time_ms
         this.uid = gift.uid
     }

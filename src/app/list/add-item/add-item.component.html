@@ -16,6 +16,15 @@
         </div>
     </div>
 
+    <div class="row" style="margin-top:10px" *ngIf="me.uid != gift.uid">
+        <div class="col">          
+                <input type="checkbox"  id="surpriseCheckbox"
+                [(ngModel)]="gift.surprise" name="pp" #pp="ngModel">  surprise (don't show {{gift.displayName}})
+        </div>
+    </div>
+
+    
+
     <span *ngIf="gift != null && gift.item != null && gift.item.trim() !== ''">
     <div class="row" style="margin-top:10px">
         <div class="col">

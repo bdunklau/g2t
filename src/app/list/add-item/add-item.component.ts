@@ -35,6 +35,12 @@ export class AddItemComponent implements OnInit {
         this.me = await this.userService.getCurrentUser()
         this.gift = new Gift()
         this.gift.uid = this.route.snapshot.params.uid
+        this.gift.displayName = this.route.snapshot.params.displayName
+
+        let forSomeoneElse = this.me.uid !== this.gift.uid
+        if(forSomeoneElse) {
+            this.gift.surprise = true
+        }
     }
 
 

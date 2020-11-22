@@ -51,7 +51,7 @@ export class ViewListComponent implements OnInit {
         this.me = await this.userService.getCurrentUser()
         this.listName = this.me.uid === uid ? "My List" : `${displayName}'s List`
         
-        this.giftSubscription = this.giftService.getList({uid: uid}).pipe(
+        this.giftSubscription = this.giftService.getList({user: this.me, uid: uid}).pipe(
           map(actions => {
             console.log('actions = ', actions)
             return actions.map(a => {

@@ -29,12 +29,25 @@ export class GiftService {
     }
 
 
-    getList(args: {uid: string}) {
+    getList(args: {user: FirebaseUserModel, uid: string}) {
+
+        console.log('args.user.uid === args.uid: ', (args.user.uid === args.uid))
+        if (args.user.uid === args.uid) {
+            // get my list
+            var retThis = this.afs.collection('gift', ref => ref.where("uid", "==", args.uid)
+                                                                .where("deleted", "==", false)
+                                                                .where("surprise", "==", false)
+                                                                .orderBy('time_ms')).snapshotChanges();
+            return retThis;
+        }
+        else {
+            // get someone else's list    
+            var retThis = this.afs.collection('gift', ref => ref.where("uid", "==", args.uid)
+                                                                .where("deleted", "==", false)
+                                                                .orderBy('time_ms')).snapshotChanges();
+            return retThis;
+        }
         
-        var retThis = this.afs.collection('gift', ref => ref.where("uid", "==", args.uid)
-                                                            .where("deleted", "==", false)
-                                                            .orderBy('time_ms')).snapshotChanges();
-        return retThis;
     }
 
 

@@ -18,6 +18,23 @@ export class HomeComponent implements OnInit {
     async ngOnInit() {
 
         /**
+         * temp code that sets all gift.surprise = false
+         */
+        // let batch = this.afs.firestore.batch()
+        // let observable = this.afs.collection('gift', ref => ref.where("time_ms", ">", 0)).snapshotChanges().pipe(take(1))
+        // let docChangeActions = await observable.toPromise()
+        // if(docChangeActions && docChangeActions.length > 0) {
+        //     _.each(docChangeActions, obj => {
+        //         let giftRef = this.afs.collection('gift').doc(obj.payload.doc.id).ref
+        //         batch.update(giftRef, {surprise: false})
+        //     })
+        //     batch.commit()
+        // }
+
+
+
+
+        /**
          * Temp code - fills in uid's of friends in each user's friends list
          * BEWARE - THE CODE BELOW QUERIES ALL USERS
          */

@@ -12,6 +12,13 @@
 <div class="row" *ngFor="let gift of gifts">
     <div class="col-11" style="margin-top:10px;margin-left:10px;margin-right:10px;padding-top:10px;padding-bottom:10px;padding-left:10px;padding-right:10px;border-radius:5px;border:1px solid #ababab">
         
+        <div class="row" *ngIf="gift.surprise" style="margin-left:0px;margin-right:0px">
+            <div class="col-12" style="background-color:gold;color:black;margin-bottom:10px;margin-right:40px;padding-top:10px;padding-bottom:10px;border-radius:5px"> 
+                <i class="fas fa-exclamation-triangle"></i> &nbsp;&nbsp; Don't tell {{gift.displayName}} &nbsp;&nbsp;&nbsp;&nbsp; It's a surprise
+            </div>
+        </div>
+
+
         <div class="row">
             <!-- left side -->
             <div class="col"> 
@@ -69,7 +76,7 @@
                 <div class="row">
                     <div class="col"> 
                             <span *ngIf="canReserve(gift)">
-                                <button class="col-12 btn btn-success" (click)="reserveGift(gift)" title="reserve item"><i class="fas fa-shopping-cart"></i> Reserve</button>
+                                <button class="col-12 btn btn-success" (click)="reserveGift(gift)" title="reserve item"> Hold</button>
                             </span>
                             <span *ngIf="gift.reserved_by_displayName && gift.uid !== me.uid">
                                 Reserved by: {{gift.reserved_by_displayName}}
