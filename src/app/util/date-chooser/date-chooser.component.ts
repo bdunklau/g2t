@@ -18,7 +18,7 @@ export class DateChooserComponent {
     @Output() dateRangeSelection = new EventEmitter<{ from: Date, to: Date }>();
     hoveredDate: Date;
     isOpen = false;
-    displayFormat: string = 'MM/DD'
+    displayFormat: string = 'MM/DD/YYYY'
     navigation = 'arrows'
 
 
