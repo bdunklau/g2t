@@ -49,7 +49,7 @@
                 <div class="row" *ngIf="gift.otherRecipients && gift.otherRecipients.length > 1"> <!-- at least 2 people because each person is listed as an otherRecipient on his  gift -->
                     <div class="col"> 
                         <hr/>
-                        Other Recipients
+                        All Recipients
                         <span *ngFor="let recipient of gift.otherRecipients">
                             <span *ngIf="recipient.uid != me.uid"> <!-- don't list yourself as an 'otherRecipient' even though you're in the list -->
                                         <br/>
