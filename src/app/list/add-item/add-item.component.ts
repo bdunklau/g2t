@@ -20,8 +20,8 @@ export class AddItemComponent implements OnInit {
     gift: Gift
     me: FirebaseUserModel
     amazonLink: string
-    defaultFrom: string = '12/25'
-    defaultTo: string;
+    defaultFrom: Date
+    // defaultTo: string;
     dates: any;
 
 
@@ -36,6 +36,8 @@ export class AddItemComponent implements OnInit {
         this.gift = new Gift()
         this.gift.uid = this.route.snapshot.params.uid
         this.gift.displayName = this.route.snapshot.params.displayName
+        this.defaultFrom = new Date()
+        this.defaultFrom.setMonth(11); this.defaultFrom.setDate(25); this.defaultFrom.setHours(23); this.defaultFrom.setMinutes(59); this.defaultFrom.setSeconds(0)
 
         let forSomeoneElse = this.me.uid !== this.gift.uid
         if(forSomeoneElse) {
