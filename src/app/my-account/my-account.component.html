@@ -13,7 +13,8 @@
 
 <div class="row" *ngFor="let child of me.children">
     <div class="col">
-        {{child.displayName}} &nbsp;&nbsp;&nbsp;
+        <!-- working on switching accounts but not there yet -->
+        <a href="#" (click)="switchAccounts(child)">{{child.displayName}}</a> &nbsp;&nbsp;&nbsp;
         <button class="btn btn-default" (click)="removeChild(me, child)"><i class="fas fa-trash"></i></button>
     </div>
 </div>

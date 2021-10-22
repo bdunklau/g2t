@@ -29,7 +29,33 @@ export class GiftService {
     }
 
 
-    getList(args: {user: FirebaseUserModel, uid: string}) {
+    /**
+     * Update 10/21/21 - filter out gifts that have been reserved and the deliver_ms  value is in the past
+     * That's how you know the gift has been received, so it can fall off the list
+     */
+    async getList(args: {user: FirebaseUserModel, uid: string}) {
+
+        console.log('args.user.uid === args.uid: ', (args.user.uid === args.uid))
+        if (args.user.uid === args.uid) {
+            // get my list
+            const xxx = await this.afs.collection('gift', ref => ref.where("uid", "==", args.uid)
+                                            .where("deleted", "==", false)
+                                            .where("surprise", "==", false)
+                                            .orderBy('time_ms'))
+            return await this.processResults(xxx)
+        }
+        else {
+            // get someone else's list  
+            const xxx = await this.afs.collection('gift', ref => ref.where("uid", "==", args.uid)
+                                            .where("deleted", "==", false)
+                                            .orderBy('time_ms'))
+            return await this.processResults(xxx)
+        }
+        
+    }
+
+
+    getList_ORIG(args: {user: FirebaseUserModel, uid: string}) {
 
         console.log('args.user.uid === args.uid: ', (args.user.uid === args.uid))
         if (args.user.uid === args.uid) {
@@ -77,13 +103,34 @@ export class GiftService {
         this.afs.collection('gift').add(gift.toObj())
     }
 
+
+    private async processResults(xxx /*: AngularFirestoreCollection<unknown>*/) {
+        const observable = await xxx.get()
+        const yyy = observable.toPromise()
+        const snapshot = await yyy
+        const list = []
+        snapshot.docs.map(doc => {
+            const alreadyReceived = doc.data().reserved && doc.data().deliver_ms < new Date().getTime()
+            if(alreadyReceived) return
+            const docId = doc.id
+            const data = doc.data()
+            const withId = { docId, ...data };
+            const _gift = withId as Gift
+            let gift = new Gift()
+            gift.clone(_gift)
+            list.push(gift)
+            console.log('gift: ', gift)
+        })
+        return list
+    }
+
+
     async removeGift(gift: Gift) {
         /**
          * joint gift?
          */
         let isJointGift = gift.otherRecipients && gift.otherRecipients.length > 0
         let otherGiftIds = _.map(gift.otherRecipients, rec => rec.giftId)
-
         if(gift.reserved) {
             await this.afs.collection('gift').doc(gift.docId).update({deleted: true})
             _.each(otherGiftIds, async giftId => { await this.afs.collection('gift').doc(giftId).update({deleted: true}) })
@@ -117,13 +164,20 @@ export class GiftService {
         }
 
         await batch.commit();
-        this.shoppingCart.push(gift)
+
+        /**
+         * 10/22/21  Discovered that this.shoppingCart is null the first time you come to someone's list
+         * If you try to Hold an item, you get a js error.  So...
+         */
+        const gifts = await this.getShoppingCart(me.uid)
+        this.shoppingCart = gifts
+        //this.shoppingCart.push(gift)
         this.messageService.updateUser({user: me, event: 'update shopping cart size'})
     }
 
 
     async getShoppingCart(uid: string) {
-        let observable = this.afs.collection('gift', ref => ref.where("reserved_by_uid", "==", uid)).snapshotChanges().pipe(take(1));
+        let observable = this.afs.collection('gift', ref => ref.where("reserved_by_uid", "==", uid).where("deliver_ms", ">", new Date().getTime())).snapshotChanges().pipe(take(1));
         let docChangeActions = await observable.toPromise()
         let gifts:Gift[] = []
         /**

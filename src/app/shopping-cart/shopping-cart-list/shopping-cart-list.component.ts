@@ -26,6 +26,7 @@ export class ShoppingCartListComponent implements OnInit {
             // query for the shopping cart
             let me = await this.userService.getCurrentUser()
             this.gifts = await this.giftService.getShoppingCart(me.uid)
+            this.updateHoldNumber(me)
             this.giftService.shoppingCart = this.gifts
         }
     }
@@ -35,6 +36,13 @@ export class ShoppingCartListComponent implements OnInit {
         let me = await this.userService.getCurrentUser()
         await this.giftService.returnItem(me, gift)
         _.remove(this.gifts, gf => { return gf.docId === gift.docId })
+    }
+
+
+    updateHoldNumber(me) {
+        const newNumber = this.gifts.length
+        me.shopping_cart_size = newNumber
+        this.userService.updateUser(me)
     }
 
 }

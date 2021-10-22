@@ -84,13 +84,21 @@ export class UserService {
         data['displayName'] = value.displayName;
         data['displayName_lowerCase'] = value.displayName.toLowerCase();
       }
+      // this is dumb
+      if(value.shopping_cart_size != null)
+          data['shopping_cart_size'] = value.shopping_cart_size;
+          
+      console.log('updateUser: value: ', value);
+      console.log('updateUser: value.shopping_cart_size: ', value.shopping_cart_size);
+
       // data['isDisabled'] = value.isDisabled;
       // data['online'] = value.online === true ? true : false;
       // data['tosAccepted'] = value.tosAccepted === true ? true : false;
       // data['privacyPolicyRead'] = value.privacyPolicyRead === true ? true : false;
-      let updateRes = this.afs.collection('user').doc(value.uid).ref.update(data);
-      console.log('updateUser: DATABASE UPDATE: ', data);
-      return updateRes;
+      await this.afs.collection('user').doc(value.uid).ref.update(data);
+      console.log('updateUser: DATABASE UPDATE:  value.uid = ', value.uid);
+      console.log('updateUser: DATABASE UPDATE:  data = ', data);
+
     }
 
 

@@ -29,4 +29,8 @@ export class MyAccountComponent implements OnInit {
         this.userService.removeChild(me, child)
     }
 
+    switchAccounts(child) {
+        console.log('child: ', child)
+    }
+
 }

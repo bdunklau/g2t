@@ -51,30 +51,38 @@ export class ViewListComponent implements OnInit {
         this.me = await this.userService.getCurrentUser()
         this.listName = this.me.uid === uid ? "My List" : `${displayName}'s List`
         
-        this.giftSubscription = this.giftService.getList({user: this.me, uid: uid}).pipe(
-          map(actions => {
-            console.log('actions = ', actions)
-            return actions.map(a => {
-              const data = a.payload.doc.data() as Gift;
-              const id = a.payload.doc.id;
-              var returnThis = { id, ...data };
-              console.log('returnThis = ', returnThis);
-              return returnThis;
-            });
-          })
-        )
-        .subscribe(objs => {
-            // need TeamMember objects, not Team's, because we need the leader attribute from TeamMember
-            this.gifts = _.map(objs, obj => {
-                let gf = obj as unknown;
-                let _gift = gf as Gift;
-                let gift = new Gift()
-                gift.clone(_gift)
-                gift.docId = obj.id
-                return gift // <-- don't forget this part ;)  otherwise you'll have an array of undefined's  ;)
-            })
-            console.log('this.gifts = ', this.gifts)
-        });
+        this.gifts = await this.giftService.getList({user: this.me, uid: uid})
+        console.log('this.gifts = ', this.gifts)
+
+
+        // this.giftSubscription = this.giftService.getList({user: this.me, uid: uid}).pipe(
+        //   map(actions => {
+        //     console.log('actions = ', actions)
+        //     return actions.map(a => {
+        //       const data = a.payload.doc.data() as Gift;
+        //       const id = a.payload.doc.id;
+        //       var returnThis = { id, ...data };
+        //       console.log('returnThis = ', returnThis);
+        //       return returnThis;
+        //     //   if(returnThis.reserved && returnThis.deliver_ms > new Date().getTime())
+        //     //       return returnThis;
+        //     });
+        //   })
+        // )
+        // .subscribe(objs => {
+        //     // need TeamMember objects, not Team's, because we need the leader attribute from TeamMember
+        //     this.gifts = _.map(objs, obj => {
+        //         // if(obj) {
+        //             let gf = obj as unknown;
+        //             let _gift = gf as Gift;
+        //             let gift = new Gift()
+        //             gift.clone(_gift)
+        //             gift.docId = obj.id
+        //             return gift // <-- don't forget this part ;)  otherwise you'll have an array of undefined's  ;)
+        //         // }
+        //     })
+        //     console.log('this.gifts = ', this.gifts)
+        // });
     }
 
 
@@ -119,8 +127,9 @@ export class ViewListComponent implements OnInit {
     }
 
 
-    reserveGift(gift: Gift) {
+    async reserveGift(gift: Gift) {
         this.giftService.reserveGift(this.me, gift)
+        this.gifts = await this.giftService.getList({user: this.me, uid: this.route.snapshot.params.uid})
     }
 
 
